@@ -1,11 +1,12 @@
 ﻿/**
  * ScriptKeywordProcessor.cs
- * Created by: Joao Borks [joao.borks@gmail.com]
- * Created on: 19/02/19 (dd/mm/yy)
+ * Created by: João Borks [joao.borks@gmail.com]
+ * Created on: 2/19/2019 (en-US)
  * Tips from https://forum.unity3d.com/threads/c-script-template-how-to-make-custom-changes.273191/
  */
 using UnityEngine;
 using UnityEditor;
+using System.Globalization;
 
 namespace CustomScriptTemplate
 {
@@ -28,11 +29,9 @@ namespace CustomScriptTemplate
                 return;
 
             string fileContent = System.IO.File.ReadAllText(path);
-            string author = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-            author = author.Contains("\\") ? author.Split('\\')[1] : author;
-            // At this part you could actually get the name from Windows user directly or give it whatever you want
-            fileContent = fileContent.Replace("#AUTHOR#", System.Security.Principal.WindowsIdentity.GetCurrent().Name.Split('\\')[1]);
-            fileContent = fileContent.Replace("#CREATIONDATE#", System.DateTime.Now.ToString("dd/MM/yy"));
+            fileContent = fileContent.Replace("#AUTHOR#", string.Format("{0}{1}", EditorPrefs.GetString(CustomScriptTemplateEditor.AuthorNameField), 
+                EditorPrefs.HasKey(CustomScriptTemplateEditor.AuthorEmailField) ? string.Format(" [{0}]", EditorPrefs.GetString(CustomScriptTemplateEditor.AuthorEmailField)) : ""));
+            fileContent = fileContent.Replace("#CREATIONDATE#", string.Format("{0} ({1})", System.DateTime.Now.ToString("d", CultureInfo.CurrentCulture), CultureInfo.CurrentCulture.Name));
 
             System.IO.File.WriteAllText(path, fileContent);
             AssetDatabase.Refresh();
