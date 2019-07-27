@@ -8,15 +8,26 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using System.IO;
-using System.Linq;
 
 namespace CustomScriptTemplate
 {
+    /// <summary>
+    /// Controls the settings of the Script Templates and the Visual of the <see cref="EditorWindow"/> for Custom Script Templates
+    /// </summary>
     public class CustomScriptTemplateEditor : EditorWindow
     {
+        /// <summary>
+        /// The name of the <see cref="authorName"/> string field saved on <see cref="EditorPrefs"/>
+        /// </summary>
         public const string AuthorNameField = "cst_authorName";
+        /// <summary>
+        /// The name of the <see cref="authorEmail"/> string field saved on <see cref="EditorPrefs"/>
+        /// </summary>
         public const string AuthorEmailField = "cst_authorEmail";
 
+        /// <summary>
+        /// Reference to the Script Template Object, which is essentialy a <see cref="TextAsset"/>
+        /// </summary>
         public static Object ScriptTemplate
         {
             get
@@ -25,6 +36,9 @@ namespace CustomScriptTemplate
                 return scriptTemplate;
             }
         }
+        /// <summary>
+        /// Path to the <see cref="ScriptTemplate"/> object
+        /// </summary>
         public static string TemplatePath
         {
             get
@@ -45,6 +59,9 @@ namespace CustomScriptTemplate
             GetWindow<CustomScriptTemplateEditor>("Custom Script Template").minSize = new Vector2(300, 300);
         }
 
+        /// <summary>
+        /// Copies the <see cref="ScriptTemplate"/> file to Unity's Script Template folder and reloads the Editor
+        /// </summary>
         public static void GenerateScriptTemplate()
         {
             File.Copy(TemplatePath, GetTargetScriptTemplatePath(), true);
@@ -52,18 +69,27 @@ namespace CustomScriptTemplate
             EditorApplication.OpenProject(Path.Combine(Application.dataPath, ".."));
         }
 
+        /// <summary>
+        /// Saves both <see cref="authorName"/> and <see cref="authorEmail"/> to the <see cref="EditorPrefs"/>
+        /// </summary>
         static void SaveInfo()
         {
             EditorPrefs.SetString(AuthorNameField, authorName);
             EditorPrefs.SetString(AuthorEmailField, authorEmail);
         }
 
+        /// <summary>
+        /// Deletes both <see cref="authorName"/> and <see cref="authorEmail"/> from <see cref="EditorPrefs"/>
+        /// </summary>
         static void ClearInfos()
         {
             EditorPrefs.DeleteKey(AuthorNameField);
             EditorPrefs.DeleteKey(AuthorEmailField);
         }
 
+        /// <summary>
+        /// Attempts to get the path to the <see cref="ScriptTemplate"/> file. The system should be able to work even if the files got moved, but never renamed or deleted.
+        /// </summary>
         static string GetSourceScriptTemplatePath()
         {
             var paths = Directory.GetDirectories(Application.dataPath, "CustomScriptTemplate", SearchOption.AllDirectories);
@@ -84,16 +110,26 @@ namespace CustomScriptTemplate
             return path;
         }
 
+        /// <summary>
+        /// Gets the path to Unity's Script Template folder
+        /// </summary>
+        /// <returns></returns>
         static string GetTargetScriptTemplatePath()
         {
             return Path.Combine(EditorApplication.applicationPath.Replace("Unity.exe", ""), "Data", "Resources", "ScriptTemplates", Path.GetFileName(TemplatePath));
         }
 
+        /// <summary>
+        /// Checks whether the <see cref="authorName"/> and <see cref="authorEmail"/> values matches the <see cref="EditorPrefs"/> data
+        /// </summary>
         static bool IsInfoUpdated()
         {
             return EditorPrefs.HasKey(AuthorNameField) && EditorPrefs.GetString(AuthorNameField) == authorName && EditorPrefs.HasKey(AuthorEmailField) && EditorPrefs.GetString(AuthorEmailField) == authorEmail;
         }
 
+        /// <summary>
+        /// Checks whether a custom Script Template has already been created
+        /// </summary>
         static bool HasTemplate()
         {
             return File.Exists(GetTargetScriptTemplatePath());

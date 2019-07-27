@@ -10,7 +10,11 @@ using System.Globalization;
 
 namespace CustomScriptTemplate
 {
-    internal sealed class ScriptKeywordProcessor : UnityEditor.AssetModificationProcessor
+    /// <summary>
+    /// This class listens to <see cref="UnityEditor.AssetModificationProcessor"/>'s <see cref="OnWillCreateAsset(string)"/> event that executes whenever a new asset is created
+    /// and replaces the keywords on scripts to what we defined on our <see cref="CustomScriptTemplateEditor"/>
+    /// </summary>
+    public class ScriptKeywordProcessor : UnityEditor.AssetModificationProcessor
     {
         public static void OnWillCreateAsset(string path)
         {
