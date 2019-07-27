@@ -66,16 +66,19 @@ namespace CustomScriptTemplate
 
         static string GetSourceScriptTemplatePath()
         {
-            var path = Directory.GetDirectories(Application.dataPath).FirstOrDefault(s => s.Contains("CustomScriptTemplate"));
-            if (string.IsNullOrEmpty(path))
+            var paths = Directory.GetDirectories(Application.dataPath, "CustomScriptTemplate", SearchOption.AllDirectories);
+            if (paths == null || paths.Length == 0)
             {
-                EditorUtility.DisplayDialog("Could not find \"CustomScriptTemplate\" folder", "The tool could not locate the \"CustomScriptTemplate\" folder, which is required to cache the script template. Please check if you have renamed the folder, otherwise reinstall the asset package", "Ok");
+                EditorUtility.DisplayDialog("Could not find \"CustomScriptTemplate\" folder", "The tool could not locate the \"CustomScriptTemplate\" folder, which is required to cache the script template. Please check if you have renamed the folder, otherwise reinstall the asset package.", "Ok");
+                GetWindow<CustomScriptTemplateEditor>().Close();
                 return null;
             }
+            var path = paths[0];
             path = Path.Combine(path, "Source", "81-C# Custom Script-NewBehaviourScript.cs.txt");
             if (!File.Exists(path))
             {
-                EditorUtility.DisplayDialog("Could not find the template asset", "The tool could not locate the template asset. Please check if you have renamed the file, otherwise reinstall the asset package", "Ok");
+                EditorUtility.DisplayDialog("Could not find the template asset", "The tool could not locate the template asset. Please check if you have renamed the file, otherwise reinstall the asset package.", "Ok");
+                GetWindow<CustomScriptTemplateEditor>().Close();
                 return null;
             }
             return path;
