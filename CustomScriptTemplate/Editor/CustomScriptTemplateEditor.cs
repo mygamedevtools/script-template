@@ -64,6 +64,7 @@ namespace CustomScriptTemplate
         [MenuItem("Assets/Custom Script Template Editor", false, 800)]
         public static void ShowWindow()
         {
+            SetIsPackage();
             GetWindow<CustomScriptTemplateEditor>("Custom Script Template").minSize = new Vector2(300, 300);
         }
 
@@ -93,7 +94,6 @@ namespace CustomScriptTemplate
         {
             EditorPrefs.DeleteKey(AuthorNameField);
             EditorPrefs.DeleteKey(AuthorEmailField);
-            EditorPrefs.DeleteKey(IsPackageField);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace CustomScriptTemplate
             var paths = Directory.GetFiles(Application.dataPath, "CustomScriptTemplate.asmdef", SearchOption.AllDirectories);
             if (paths == null || paths.Length == 0)
             {
-                paths = Directory.GetFiles(Path.Combine(Application.dataPath, "..", "Library"), "CustomScriptTemplate.asmdef", SearchOption.AllDirectories);
+                paths = Directory.GetFiles(Application.dataPath.Replace("Assets", "Library"), "CustomScriptTemplate.asmdef", SearchOption.AllDirectories);
                 if (paths == null || paths.Length == 0)
                 {
                     EditorUtility.DisplayDialog("Could not find package files", "The tool could not locate the package files. Please check if you have renamed the files, otherwise reinstall the asset package.", "Ok");
@@ -135,8 +135,6 @@ namespace CustomScriptTemplate
         /// </summary>
         static string GetSourceScriptTemplatePath()
         {
-            SetIsPackage();
-
             string[] paths;
             if (isPackage)
                 paths = Directory.GetDirectories(Application.dataPath.Replace("Assets", "Library/PackageCache"), "com.joaoborks.customscripttemplate*", SearchOption.AllDirectories);
