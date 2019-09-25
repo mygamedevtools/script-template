@@ -33,7 +33,12 @@ namespace CustomScriptTemplate
             get
             {
                 if (isPackage)
-                    scriptTemplate = AssetDatabase.LoadAssetAtPath<TextAsset>(TemplatePath.Substring(TemplatePath.IndexOf("PackageCache")).Replace("Cache", "s"));
+                {
+                    var path = TemplatePath.Substring(TemplatePath.IndexOf("PackageCache")).Replace("Cache", "s");
+                    var init = path.IndexOf('@');
+                    var end = path.IndexOf(Path.DirectorySeparatorChar, 9);
+                    scriptTemplate = AssetDatabase.LoadAssetAtPath<TextAsset>(path.Remove(init, end - init));
+                }
                 else
                     scriptTemplate = AssetDatabase.LoadAssetAtPath<TextAsset>(TemplatePath.Replace(Application.dataPath, "Assets"));
                 return scriptTemplate;
@@ -119,6 +124,8 @@ namespace CustomScriptTemplate
         /// </summary>
         static string GetSourceScriptTemplatePath()
         {
+            SetIsPackage();
+
             string[] paths;
             if (isPackage)
                 paths = Directory.GetDirectories(Application.dataPath.Replace("Assets", "Library/PackageCache"), "com.joaoborks.customscripttemplate*", SearchOption.AllDirectories);
