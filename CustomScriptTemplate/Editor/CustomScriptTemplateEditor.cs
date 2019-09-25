@@ -36,7 +36,10 @@ namespace CustomScriptTemplate
         {
             get
             {
-                scriptTemplate = scriptTemplate ?? AssetDatabase.LoadAssetAtPath<TextAsset>(TemplatePath.Replace(Application.dataPath, "Assets"));
+                if (isPackage)
+                    scriptTemplate = AssetDatabase.LoadAssetAtPath<TextAsset>(TemplatePath.Substring(TemplatePath.IndexOf("PackageCache")).Replace("Cache", "s"));
+                else
+                    scriptTemplate = AssetDatabase.LoadAssetAtPath<TextAsset>(TemplatePath.Replace(Application.dataPath, "Assets"));
                 return scriptTemplate;
             }
         }
@@ -98,6 +101,9 @@ namespace CustomScriptTemplate
         /// </summary>
         static void SetIsPackage()
         {
+            isPackage = true;
+            return;
+
             if (EditorPrefs.HasKey(IsPackageField))
             {
                 isPackage = EditorPrefs.GetBool(IsPackageField);
@@ -136,7 +142,7 @@ namespace CustomScriptTemplate
 
             string[] paths;
             if (isPackage)
-                paths = Directory.GetDirectories(Path.Combine(Application.dataPath, "..", "Library", "PackageCache"), "customscripttemplate", SearchOption.AllDirectories);
+                paths = Directory.GetDirectories(Application.dataPath.Replace("Assets", "Library/PackageCache"), "com.joaoborks.customscripttemplate*", SearchOption.AllDirectories);
             else
                 paths = Directory.GetDirectories(Application.dataPath, "CustomScriptTemplate", SearchOption.AllDirectories);
 
