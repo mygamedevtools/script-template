@@ -24,10 +24,6 @@ namespace CustomScriptTemplate
         /// The name of the <see cref="authorEmail"/> string field saved on <see cref="EditorPrefs"/>
         /// </summary>
         public const string AuthorEmailField = "com.joaoborks.cst.authorEmail";
-        /// <summary>
-        /// The name of the <see cref="isPackage"/> bool field saved on <see cref="EditorPrefs"/>
-        /// </summary>
-        public const string IsPackageField = "com.joaoborks.cst.ispackage";
 
         /// <summary>
         /// Reference to the Script Template Object, which is essentialy a <see cref="TextAsset"/>
@@ -101,12 +97,6 @@ namespace CustomScriptTemplate
         /// </summary>
         static void SetIsPackage()
         {
-            if (EditorPrefs.HasKey(IsPackageField))
-            {
-                isPackage = EditorPrefs.GetBool(IsPackageField);
-                return;
-            }
-
             var paths = Directory.GetFiles(Application.dataPath, "CustomScriptTemplate.asmdef", SearchOption.AllDirectories);
             if (paths == null || paths.Length == 0)
             {
@@ -117,16 +107,10 @@ namespace CustomScriptTemplate
                     GetWindow<CustomScriptTemplateEditor>().Close();
                 }
                 else
-                {
-                    EditorPrefs.SetBool(IsPackageField, true);
                     isPackage = true;
-                }
             }
             else
-            {
-                EditorPrefs.SetBool(IsPackageField, false);
                 isPackage = false;
-            }
 
         }
 
