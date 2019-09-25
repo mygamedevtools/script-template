@@ -101,9 +101,6 @@ namespace CustomScriptTemplate
         /// </summary>
         static void SetIsPackage()
         {
-            isPackage = true;
-            return;
-
             if (EditorPrefs.HasKey(IsPackageField))
             {
                 isPackage = EditorPrefs.GetBool(IsPackageField);
@@ -153,14 +150,14 @@ namespace CustomScriptTemplate
                 return null;
             }
             var path = paths[0];
-            path = Path.Combine(path, "Source", "81-C# Custom Script-NewBehaviourScript.cs.txt");
-            if (!File.Exists(path))
+            paths = Directory.GetFiles(path, "*.cs.txt", SearchOption.AllDirectories);
+            if (paths == null || paths.Length == 0)
             {
                 EditorUtility.DisplayDialog("Could not find the template asset", "The tool could not locate the template asset. Please check if you have renamed the file, otherwise reinstall the asset package.", "Ok");
                 GetWindow<CustomScriptTemplateEditor>().Close();
                 return null;
             }
-            return path;
+            return paths[0];
         }
 
         /// <summary>
