@@ -19,11 +19,15 @@ namespace CustomScriptTemplate
         /// <summary>
         /// The name of the <see cref="authorName"/> string field saved on <see cref="EditorPrefs"/>
         /// </summary>
-        public const string AuthorNameField = "cst_authorName";
+        public const string AuthorNameField = "com.joaoborks.cst.authorName";
         /// <summary>
         /// The name of the <see cref="authorEmail"/> string field saved on <see cref="EditorPrefs"/>
         /// </summary>
-        public const string AuthorEmailField = "cst_authorEmail";
+        public const string AuthorEmailField = "com.joaoborks.cst.authorEmail";
+        /// <summary>
+        /// The name of the <see cref="isPackage"/> bool field saved on <see cref="EditorPrefs"/>
+        /// </summary>
+        public const string IsPackageField = "com.joaoborks.cst.ispackage";
 
         /// <summary>
         /// Reference to the Script Template Object, which is essentialy a <see cref="TextAsset"/>
@@ -52,6 +56,7 @@ namespace CustomScriptTemplate
         static string authorName;
         static string authorEmail;
         static string templatePath;
+        static bool isPackage;
 
         [MenuItem("Assets/Custom Script Template Editor", false, 800)]
         public static void ShowWindow()
@@ -85,6 +90,41 @@ namespace CustomScriptTemplate
         {
             EditorPrefs.DeleteKey(AuthorNameField);
             EditorPrefs.DeleteKey(AuthorEmailField);
+            EditorPrefs.DeleteKey(IsPackageField);
+        }
+
+        /// <summary>
+        /// Sets if the tool is installed as a regular asset or as a custom package through the Package Manager, in order to load the files
+        /// </summary>
+        static void SetIsPackage()
+        {
+            if (EditorPrefs.HasKey(IsPackageField))
+            {
+                isPackage = EditorPrefs.GetBool(IsPackageField);
+                return;
+            }
+
+            var paths = Directory.GetFiles(Application.dataPath, "CustomScriptTemplate.asmdef", SearchOption.AllDirectories);
+            if (paths == null || paths.Length == 0)
+            {
+                paths = Directory.GetFiles(Path.Combine(Application.dataPath, "..", "Library"), "CustomScriptTemplate.asmdef", SearchOption.AllDirectories);
+                if (paths == null || paths.Length == 0)
+                {
+                    EditorUtility.DisplayDialog("Could not find package files", "The tool could not locate the package files. Please check if you have renamed the files, otherwise reinstall the asset package.", "Ok");
+                    GetWindow<CustomScriptTemplateEditor>().Close();
+                }
+                else
+                {
+                    EditorPrefs.SetBool(IsPackageField, true);
+                    isPackage = true;
+                }
+            }
+            else
+            {
+                EditorPrefs.SetBool(IsPackageField, false);
+                isPackage = false;
+            }
+
         }
 
         /// <summary>
@@ -92,7 +132,14 @@ namespace CustomScriptTemplate
         /// </summary>
         static string GetSourceScriptTemplatePath()
         {
-            var paths = Directory.GetDirectories(Application.dataPath, "CustomScriptTemplate", SearchOption.AllDirectories);
+            SetIsPackage();
+
+            string[] paths;
+            if (isPackage)
+                paths = Directory.GetDirectories(Path.Combine(Application.dataPath, "..", "Library", "PackageCache"), "customscripttemplate", SearchOption.AllDirectories);
+            else
+                paths = Directory.GetDirectories(Application.dataPath, "CustomScriptTemplate", SearchOption.AllDirectories);
+
             if (paths == null || paths.Length == 0)
             {
                 EditorUtility.DisplayDialog("Could not find \"CustomScriptTemplate\" folder", "The tool could not locate the \"CustomScriptTemplate\" folder, which is required to cache the script template. Please check if you have renamed the folder, otherwise reinstall the asset package.", "Ok");
@@ -113,7 +160,6 @@ namespace CustomScriptTemplate
         /// <summary>
         /// Gets the path to Unity's Script Template folder
         /// </summary>
-        /// <returns></returns>
         static string GetTargetScriptTemplatePath()
         {
             return Path.Combine(EditorApplication.applicationPath.Replace("Unity.exe", ""), "Data", "Resources", "ScriptTemplates", Path.GetFileName(TemplatePath));
