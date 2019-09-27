@@ -1,11 +1,9 @@
 # Unity Custom Script Template
 A simple tool to create your own script template.
 
-:warning: If you want to extend or customize this tool's functionalities, fork the [project repository](https://github.com/JoaoBorks/unity-customscripttemplate-project) instead, as it is setup inside a Unity Project.
+:warning: *If you want to extend or customize this tool's functionalities, fork the [project repository](https://github.com/JoaoBorks/unity-customscripttemplate-project) instead, as it is setup inside a Unity Project.*
 
 :warning: *If you feel like any information is missing, [check the issues tab](https://github.com/JoaoBorks/unity-customscripttemplate/issues) for problems you might be having or [create a new one](https://github.com/JoaoBorks/unity-customscripttemplate/issues/new) if you couldn't find anything. Feel free to give suggestions and feedback.*
-
-:link: Check out the [wiki](https://github.com/JoaoBorks/unity-customscripttemplate/wiki) if you have any doubts
 
 ## What's this about?
 This tool adds another Script Template to Unity that will serve as an alternative for the default "C# Script" that I personally always
