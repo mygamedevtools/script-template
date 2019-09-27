@@ -19,11 +19,15 @@ namespace CustomScriptTemplate
         /// <summary>
         /// The name of the <see cref="authorName"/> string field saved on <see cref="EditorPrefs"/>
         /// </summary>
-        public const string AuthorNameField = "cst_authorName";
+        public const string AuthorNameField = "com.joaoborks.cst.authorName";
         /// <summary>
         /// The name of the <see cref="authorEmail"/> string field saved on <see cref="EditorPrefs"/>
         /// </summary>
-        public const string AuthorEmailField = "cst_authorEmail";
+        public const string AuthorEmailField = "com.joaoborks.cst.authorEmail";
+        /// <summary>
+        /// The name of the <see cref="localGUID"/> string field saved on <see cref="EditorPrefs"/>
+        /// </summary>
+        public const string LocalGUIDField = "com.joaoborks.cst.localguid";
 
         /// <summary>
         /// Reference to the Script Template Object, which is essentialy a <see cref="TextAsset"/>
@@ -32,8 +36,30 @@ namespace CustomScriptTemplate
         {
             get
             {
-                scriptTemplate = scriptTemplate ?? AssetDatabase.LoadAssetAtPath<TextAsset>(TemplatePath.Replace(Application.dataPath, "Assets"));
+                if (isPackage)
+                {
+                    var path = TemplatePath.Substring(TemplatePath.IndexOf("PackageCache")).Replace("Cache", "s");
+                    var init = path.IndexOf('@');
+                    var end = path.IndexOf(Path.DirectorySeparatorChar, 9);
+                    scriptTemplate = AssetDatabase.LoadAssetAtPath<TextAsset>(path.Remove(init, end - init));
+                }
+                else
+                    scriptTemplate = AssetDatabase.LoadAssetAtPath<TextAsset>(TemplatePath.Replace(Application.dataPath, "Assets"));
                 return scriptTemplate;
+            }
+        }
+        /// <summary>
+        /// Reference to the Local Script Template Object
+        /// </summary>
+        public static Object LocalTemplate
+        {
+            get
+            {
+                if (!HasLocalTemplate())
+                    return null;
+                if (localTemplate == null)
+                    localTemplate = AssetDatabase.LoadAssetAtPath<TextAsset>(AssetDatabase.GUIDToAssetPath(localGUID));
+                return localTemplate;
             }
         }
         /// <summary>
@@ -49,13 +75,17 @@ namespace CustomScriptTemplate
         }
 
         static Object scriptTemplate;
+        static Object localTemplate;
         static string authorName;
         static string authorEmail;
+        static string localGUID;
         static string templatePath;
+        static bool isPackage;
 
         [MenuItem("Assets/Custom Script Template Editor", false, 800)]
         public static void ShowWindow()
         {
+            SetIsPackage();
             GetWindow<CustomScriptTemplateEditor>("Custom Script Template").minSize = new Vector2(300, 300);
         }
 
@@ -88,11 +118,39 @@ namespace CustomScriptTemplate
         }
 
         /// <summary>
+        /// Sets if the tool is installed as a regular asset or as a custom package through the Package Manager, in order to load the files
+        /// </summary>
+        static void SetIsPackage()
+        {
+            var paths = Directory.GetFiles(Application.dataPath, "CustomScriptTemplate.asmdef", SearchOption.AllDirectories);
+            if (paths == null || paths.Length == 0)
+            {
+                paths = Directory.GetFiles(Application.dataPath.Replace("Assets", "Library"), "CustomScriptTemplate.asmdef", SearchOption.AllDirectories);
+                if (paths == null || paths.Length == 0)
+                {
+                    EditorUtility.DisplayDialog("Could not find package files", "The tool could not locate the package files. Please check if you have renamed the files, otherwise reinstall the asset package.", "Ok");
+                    GetWindow<CustomScriptTemplateEditor>().Close();
+                }
+                else
+                    isPackage = true;
+            }
+            else
+                isPackage = false;
+        }
+
+        /// <summary>
         /// Attempts to get the path to the <see cref="ScriptTemplate"/> file. The system should be able to work even if the files got moved, but never renamed or deleted.
         /// </summary>
         static string GetSourceScriptTemplatePath()
         {
-            var paths = Directory.GetDirectories(Application.dataPath, "CustomScriptTemplate", SearchOption.AllDirectories);
+            SetIsPackage();
+
+            string[] paths;
+            if (isPackage)
+                paths = Directory.GetDirectories(Application.dataPath.Replace("Assets", "Library/PackageCache"), "com.joaoborks.customscripttemplate*", SearchOption.AllDirectories);
+            else
+                paths = Directory.GetDirectories(Application.dataPath, "CustomScriptTemplate", SearchOption.AllDirectories);
+
             if (paths == null || paths.Length == 0)
             {
                 EditorUtility.DisplayDialog("Could not find \"CustomScriptTemplate\" folder", "The tool could not locate the \"CustomScriptTemplate\" folder, which is required to cache the script template. Please check if you have renamed the folder, otherwise reinstall the asset package.", "Ok");
@@ -100,20 +158,19 @@ namespace CustomScriptTemplate
                 return null;
             }
             var path = paths[0];
-            path = Path.Combine(path, "Source", "81-C# Custom Script-NewBehaviourScript.cs.txt");
-            if (!File.Exists(path))
+            paths = Directory.GetFiles(path, "*.cs.txt", SearchOption.AllDirectories);
+            if (paths == null || paths.Length == 0)
             {
                 EditorUtility.DisplayDialog("Could not find the template asset", "The tool could not locate the template asset. Please check if you have renamed the file, otherwise reinstall the asset package.", "Ok");
                 GetWindow<CustomScriptTemplateEditor>().Close();
                 return null;
             }
-            return path;
+            return paths[0];
         }
 
         /// <summary>
         /// Gets the path to Unity's Script Template folder
         /// </summary>
-        /// <returns></returns>
         static string GetTargetScriptTemplatePath()
         {
             return Path.Combine(EditorApplication.applicationPath.Replace("Unity.exe", ""), "Data", "Resources", "ScriptTemplates", Path.GetFileName(TemplatePath));
@@ -135,11 +192,30 @@ namespace CustomScriptTemplate
             return File.Exists(GetTargetScriptTemplatePath());
         }
 
+        /// <summary>
+        /// Checks whether a local Script Template has been created
+        /// </summary>
+        static bool HasLocalTemplate()
+        {
+            if (!EditorPrefs.HasKey(LocalGUIDField))
+                return false;
+            localGUID = EditorPrefs.GetString(LocalGUIDField);
+            bool exists = File.Exists(AssetDatabase.GUIDToAssetPath(localGUID));
+            if (!exists)
+            {
+                localTemplate = null;
+                localGUID = null;
+                EditorPrefs.DeleteKey(LocalGUIDField);
+            }
+            return exists;
+        }
+
         void OnGUI()
         {
             authorName = authorName ?? EditorPrefs.GetString(AuthorNameField, "Unamed");
             authorEmail = authorEmail ?? EditorPrefs.GetString(AuthorEmailField, "");
             bool updated = IsInfoUpdated();
+            bool hasLocalTemplate = HasLocalTemplate();
 
             EditorGUILayout.Space();
             EditorGUILayout.BeginVertical(GUILayout.MaxWidth(450));
@@ -165,18 +241,38 @@ namespace CustomScriptTemplate
             EditorGUILayout.BeginVertical(GUILayout.MaxWidth(450));
             EditorGUILayout.LabelField("Template", EditorStyles.boldLabel);
             GUI.enabled = false;
-            EditorGUILayout.ObjectField("Custom Template", ScriptTemplate, typeof(TextAsset), false);
+            EditorGUILayout.ObjectField("Custom Template", hasLocalTemplate ? LocalTemplate : ScriptTemplate, typeof(TextAsset), false);
             GUI.enabled = true;
             EditorGUILayout.HelpBox("Generating the Script Template will restart the Editor in order to apply the changes.", MessageType.Info);
             if (HasTemplate())
                 EditorGUILayout.HelpBox("A Script Template already exists and will be overwritten by the new generated one.", MessageType.Warning);
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Edit"))
-                AssetDatabase.OpenAsset(ScriptTemplate);
+            {
+                if (isPackage && !hasLocalTemplate)
+                    CreateLocalTemplate();
+                else
+                    AssetDatabase.OpenAsset(hasLocalTemplate ? LocalTemplate : ScriptTemplate);
+            }
             if (GUILayout.Button("Generate"))
                 GenerateScriptTemplate();
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.EndVertical();
+        }
+
+        /// <summary>
+        /// Creates a local template file that can be edited, as oposed to a package script template
+        /// </summary>
+        void CreateLocalTemplate()
+        {
+            string template = File.ReadAllText(TemplatePath);
+            Debug.Log(template);
+            var path = Path.Combine("Assets", "CustomScriptTemplate", Path.GetFileName(TemplatePath));
+            File.Copy(TemplatePath, path);
+            AssetDatabase.Refresh();
+            localGUID = AssetDatabase.AssetPathToGUID(path);
+            EditorPrefs.SetString(LocalGUIDField, localGUID);
+            localTemplate = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
         }
     }
 }
