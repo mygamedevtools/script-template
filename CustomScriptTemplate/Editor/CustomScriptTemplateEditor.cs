@@ -24,6 +24,10 @@ namespace CustomScriptTemplate
         /// The name of the <see cref="authorEmail"/> string field saved on <see cref="EditorPrefs"/>
         /// </summary>
         public const string AuthorEmailField = "com.joaoborks.cst.authorEmail";
+        /// <summary>
+        /// The name of the <see cref="localGUID"/> string field saved on <see cref="EditorPrefs"/>
+        /// </summary>
+        public const string LocalGUIDField = "com.joaoborks.cst.localguid";
 
         /// <summary>
         /// Reference to the Script Template Object, which is essentialy a <see cref="TextAsset"/>
@@ -45,6 +49,20 @@ namespace CustomScriptTemplate
             }
         }
         /// <summary>
+        /// Reference to the Local Script Template Object
+        /// </summary>
+        public static Object LocalTemplate
+        {
+            get
+            {
+                if (!HasLocalTemplate())
+                    return null;
+                if (localTemplate == null)
+                    localTemplate = AssetDatabase.LoadAssetAtPath<TextAsset>(AssetDatabase.GUIDToAssetPath(localGUID));
+                return localTemplate;
+            }
+        }
+        /// <summary>
         /// Path to the <see cref="ScriptTemplate"/> object
         /// </summary>
         public static string TemplatePath
@@ -57,8 +75,10 @@ namespace CustomScriptTemplate
         }
 
         static Object scriptTemplate;
+        static Object localTemplate;
         static string authorName;
         static string authorEmail;
+        static string localGUID;
         static string templatePath;
         static bool isPackage;
 
@@ -116,7 +136,6 @@ namespace CustomScriptTemplate
             }
             else
                 isPackage = false;
-
         }
 
         /// <summary>
@@ -173,11 +192,30 @@ namespace CustomScriptTemplate
             return File.Exists(GetTargetScriptTemplatePath());
         }
 
+        /// <summary>
+        /// Checks whether a local Script Template has been created
+        /// </summary>
+        static bool HasLocalTemplate()
+        {
+            if (!EditorPrefs.HasKey(LocalGUIDField))
+                return false;
+            localGUID = EditorPrefs.GetString(LocalGUIDField);
+            bool exists = File.Exists(AssetDatabase.GUIDToAssetPath(localGUID));
+            if (!exists)
+            {
+                localTemplate = null;
+                localGUID = null;
+                EditorPrefs.DeleteKey(LocalGUIDField);
+            }
+            return exists;
+        }
+
         void OnGUI()
         {
             authorName = authorName ?? EditorPrefs.GetString(AuthorNameField, "Unamed");
             authorEmail = authorEmail ?? EditorPrefs.GetString(AuthorEmailField, "");
             bool updated = IsInfoUpdated();
+            bool hasLocalTemplate = HasLocalTemplate();
 
             EditorGUILayout.Space();
             EditorGUILayout.BeginVertical(GUILayout.MaxWidth(450));
@@ -203,18 +241,38 @@ namespace CustomScriptTemplate
             EditorGUILayout.BeginVertical(GUILayout.MaxWidth(450));
             EditorGUILayout.LabelField("Template", EditorStyles.boldLabel);
             GUI.enabled = false;
-            EditorGUILayout.ObjectField("Custom Template", ScriptTemplate, typeof(TextAsset), false);
+            EditorGUILayout.ObjectField("Custom Template", hasLocalTemplate ? LocalTemplate : ScriptTemplate, typeof(TextAsset), false);
             GUI.enabled = true;
             EditorGUILayout.HelpBox("Generating the Script Template will restart the Editor in order to apply the changes.", MessageType.Info);
             if (HasTemplate())
                 EditorGUILayout.HelpBox("A Script Template already exists and will be overwritten by the new generated one.", MessageType.Warning);
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Edit"))
-                AssetDatabase.OpenAsset(ScriptTemplate);
+            {
+                if (isPackage && !hasLocalTemplate)
+                    CreateLocalTemplate();
+                else
+                    AssetDatabase.OpenAsset(hasLocalTemplate ? LocalTemplate : ScriptTemplate);
+            }
             if (GUILayout.Button("Generate"))
                 GenerateScriptTemplate();
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.EndVertical();
+        }
+
+        /// <summary>
+        /// Creates a local template file that can be edited, as oposed to a package script template
+        /// </summary>
+        void CreateLocalTemplate()
+        {
+            string template = File.ReadAllText(TemplatePath);
+            Debug.Log(template);
+            var path = Path.Combine("Assets", "CustomScriptTemplate", Path.GetFileName(TemplatePath));
+            File.Copy(TemplatePath, path);
+            AssetDatabase.Refresh();
+            localGUID = AssetDatabase.AssetPathToGUID(path);
+            EditorPrefs.SetString(LocalGUIDField, localGUID);
+            localTemplate = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
         }
     }
 }
