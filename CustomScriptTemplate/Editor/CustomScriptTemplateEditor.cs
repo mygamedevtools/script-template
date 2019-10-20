@@ -268,6 +268,9 @@ namespace CustomScriptTemplate
             string template = File.ReadAllText(TemplatePath);
             Debug.Log(template);
             var path = Path.Combine("Assets", "CustomScriptTemplate", Path.GetFileName(TemplatePath));
+            var dir = Path.GetDirectoryName(path);
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
             File.Copy(TemplatePath, path);
             AssetDatabase.Refresh();
             localGUID = AssetDatabase.AssetPathToGUID(path);
