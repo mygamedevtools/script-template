@@ -23,7 +23,7 @@ You should add this to your `manifest.json` under the `Packages` folder on the r
 ```
 {
   "dependencies": {
-	"com.joaoborks.customscripttemplate": "https://github.com/JoaoBorks/unity-customscripttemplate"
+	"com.joaoborks.customscripttemplate": "https://github.com/JoaoBorks/unity-customscripttemplate.git"
   }
 }
 ```
