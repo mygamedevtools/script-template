@@ -36,7 +36,7 @@ namespace CustomScriptTemplate
         {
             get
             {
-                if (isPackage)
+                if (IsPackage)
                 {
                     var path = TemplatePath.Substring(TemplatePath.IndexOf("PackageCache")).Replace("Cache", "s");
                     var init = path.IndexOf('@');
@@ -73,6 +73,33 @@ namespace CustomScriptTemplate
                 return templatePath;
             }
         }
+        /// <summary>
+        /// Gets if the tool is installed as a regular asset or as a custom package through the Package Manager, in order to load the files
+        /// </summary>
+        public static bool IsPackage
+        {
+            get
+            {
+                if (!isPackage.HasValue)
+                {
+                    var paths = Directory.GetFiles(Application.dataPath, "CustomScriptTemplate.asmdef", SearchOption.AllDirectories);
+                    if (paths == null || paths.Length == 0)
+                    {
+                        paths = Directory.GetFiles(Application.dataPath.Replace("Assets", "Library"), "CustomScriptTemplate.asmdef", SearchOption.AllDirectories);
+                        if (paths == null || paths.Length == 0)
+                        {
+                            EditorUtility.DisplayDialog("Could not find package files", "The tool could not locate the package files. Please check if you have renamed the files, otherwise reinstall the asset package.", "Ok");
+                            GetWindow<CustomScriptTemplateEditor>().Close();
+                        }
+                        else
+                            isPackage = true;
+                    }
+                    else
+                        isPackage = false;
+                }
+                return isPackage.Value;
+            }
+        }
 
         static Object scriptTemplate;
         static Object localTemplate;
@@ -80,12 +107,11 @@ namespace CustomScriptTemplate
         static string authorEmail;
         static string localGUID;
         static string templatePath;
-        static bool isPackage;
+        static bool? isPackage;
 
         [MenuItem("Assets/Custom Script Template Editor", false, 800)]
         public static void ShowWindow()
         {
-            SetIsPackage();
             GetWindow<CustomScriptTemplateEditor>("Custom Script Template").minSize = new Vector2(300, 300);
         }
 
@@ -118,35 +144,12 @@ namespace CustomScriptTemplate
         }
 
         /// <summary>
-        /// Sets if the tool is installed as a regular asset or as a custom package through the Package Manager, in order to load the files
-        /// </summary>
-        static void SetIsPackage()
-        {
-            var paths = Directory.GetFiles(Application.dataPath, "CustomScriptTemplate.asmdef", SearchOption.AllDirectories);
-            if (paths == null || paths.Length == 0)
-            {
-                paths = Directory.GetFiles(Application.dataPath.Replace("Assets", "Library"), "CustomScriptTemplate.asmdef", SearchOption.AllDirectories);
-                if (paths == null || paths.Length == 0)
-                {
-                    EditorUtility.DisplayDialog("Could not find package files", "The tool could not locate the package files. Please check if you have renamed the files, otherwise reinstall the asset package.", "Ok");
-                    GetWindow<CustomScriptTemplateEditor>().Close();
-                }
-                else
-                    isPackage = true;
-            }
-            else
-                isPackage = false;
-        }
-
-        /// <summary>
         /// Attempts to get the path to the <see cref="ScriptTemplate"/> file. The system should be able to work even if the files got moved, but never renamed or deleted.
         /// </summary>
         static string GetSourceScriptTemplatePath()
         {
-            SetIsPackage();
-
             string[] paths;
-            if (isPackage)
+            if (IsPackage)
                 paths = Directory.GetDirectories(Application.dataPath.Replace("Assets", "Library/PackageCache"), "com.joaoborks.customscripttemplate*", SearchOption.AllDirectories);
             else
                 paths = Directory.GetDirectories(Application.dataPath, "CustomScriptTemplate", SearchOption.AllDirectories);
@@ -249,7 +252,7 @@ namespace CustomScriptTemplate
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Edit"))
             {
-                if (isPackage && !hasLocalTemplate)
+                if (IsPackage && !hasLocalTemplate)
                     CreateLocalTemplate();
                 else
                     AssetDatabase.OpenAsset(hasLocalTemplate ? LocalTemplate : ScriptTemplate);
