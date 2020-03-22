@@ -19,6 +19,12 @@ Download the repository and copy the `CustomScriptTemplate` folder to your proje
 
 ### As a package
 
+:information_source: *For importing as a package, it is required that you have [Git](https://git-scm.com/) installed and added to the PATH*
+
+#### For 2019.1+: [Installing from a git URL](https://docs.unity3d.com/Manual/upm-ui-giturl.html)
+You can open the Package Manager and then click on the `+` button on the top left corner. From there select `Add package from git URL...`, type `https://github.com/JoaoBorks/unity-customscripttemplate.git` and click `Add`. The package will be imported by the Package Manager.
+
+#### Other Package Manager supported versions: Add manually to manifest
 You should add this to your `manifest.json` under the `Packages` folder on the root of your Unity Project:
 ```
 {
