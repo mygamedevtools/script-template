@@ -4,6 +4,7 @@
  * Created on: 2/19/2019 (en-US)
  * Tips from https://forum.unity3d.com/threads/c-script-template-how-to-make-custom-changes.273191/
  */
+
 using UnityEngine;
 using UnityEditor;
 using System.Globalization;

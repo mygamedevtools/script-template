@@ -1,9 +1,9 @@
 {
   "name": "com.joaoborks.customscripttemplate",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "displayName": "Custom Script Template",
-  "description": "This tool adds another Script Template to Unity that will serve as an alternative for the default \"C#Script\" that I personally always modify before writing my scripts. In essence, it adds a signature header on every script with your name, email and creation date. Also, it removes the Start() and Update() methods from the default template.",
-  "unity": "2018.3",
+  "description": "This tool adds another Script Template to Unity that will serve as an alternative for the default \"C#Script\" that I personally always modify before writing my scripts.\nIn essence, it adds a signature header on every script with your name, email and creation date. \nAlso, it removes the Start() and Update() methods from the default template.",
+  "unity": "2018.4",
   "keywords": [
     "custom",
     "script",
@@ -13,8 +13,10 @@
     "editor"
   ],
   "author": {
-    "name": "João Borks",
+    "name": "Jo\u00e3o Borks",
     "email": "joao.borks@gmail.com",
     "url": "https://github.com/JoaoBorks"
-  }
+  },
+  "type": "tool",
+  "unityRelease": "0f1"
 }

@@ -1,8 +1,6 @@
 # Unity Custom Script Template
 A simple tool to create your own script template.
 
-:warning: *If you want to extend or customize this tool's functionalities, you might as well clone the [project repository](https://github.com/JoaoBorks/unity-customscripttemplate-project) to use as the Unity Project.*
-
 :warning: *If you feel like any information is missing, [check the issues tab](https://github.com/JoaoBorks/unity-customscripttemplate/issues) for problems you might be having or [create a new one](https://github.com/JoaoBorks/unity-customscripttemplate/issues/new) if you couldn't find anything. Feel free to give suggestions and feedback.*
 
 ## What's this about?
@@ -11,13 +9,6 @@ modify before writing my scripts. In essence, it adds a signature header on ever
 it removes the `Start()` and `Update()` methods from the default template.
 
 ## Add to your project
-
-### As an asset
-
-Download the repository and copy the `CustomScriptTemplate` folder to your project. It will add a menu item in 
-`Assets/Custom Script Template`. 
-
-### As a package
 
 :information_source: *For importing as a package, it is required that you have [Git](https://git-scm.com/) installed and added to the PATH*
 
@@ -44,7 +35,7 @@ It will be installed on the next Unity Editor start. Later you will be able to u
 
 From there you can open the **Custom Script Template Editor** Window.
 
-![Custom Script Template Editor](https://user-images.githubusercontent.com/9505905/65558097-dbfdfa00-df0b-11e9-9a5c-fcd3355cbf30.png)
+![Custom Script Template Editor](https://user-images.githubusercontent.com/9505905/92528263-dc67d180-f1fe-11ea-83fa-d8e6fc2fa054.png)
 
 Here you can set your Author Name and Email to add to your script's signature header. You need to click save to store this data into
 the [Editor Prefs](https://docs.unity3d.com/ScriptReference/EditorPrefs.html). You also have the option to clear the saved data.
