@@ -4,15 +4,19 @@
 [Bb]uild/
 [Bb]uilds/
 [Ll]ogs/
+[Uu]serSettings/
 
 # Never ignore Asset meta data
 ![Aa]ssets/**/*.meta
 
 # Uncomment this line if you wish to ignore the asset store tools plugin
-AssetStoreTools*
+[Aa]ssets/AssetStoreTools*
 
 # Visual Studio cache directory
 /.vs/
+
+# Rider directory
+/.idea/
 
 # VS Code
 /.vscode/
@@ -39,7 +43,9 @@ ExportedObj/
 *.VC.db
 
 # Unity3D generated meta files
-*.meta
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
 
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
@@ -59,3 +65,7 @@ Thumbs.db
 
 # Crashlytics generated file
 crashlytics-build.properties
+
+# Other
+[Aa]ssets/Amazing Assets/Curved World/Editor/Installer/
+[Aa]ssets/Amazing Assets/Curved World/Shaders/Packages/
