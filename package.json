@@ -1,6 +1,6 @@
 {
   "name": "com.joaoborks.customscripttemplate",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "displayName": "Custom Script Template",
   "description": "This tool adds another Script Template to Unity that will serve as an alternative for the default \"C#Script\" that I personally always modify before writing my scripts.\nIn essence, it adds a signature header on every script with your name, email and creation date. \nAlso, it removes the Start() and Update() methods from the default template.",
   "unity": "2018.4",
