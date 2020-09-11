@@ -74,7 +74,7 @@ namespace CustomScriptTemplate
         /// </summary>
         public static void GenerateScriptTemplate()
         {
-            //File.Copy(TemplatePath, GetTargetScriptTemplatePath(), true);
+            File.Copy(TemplatePath, GetTargetScriptTemplatePath(), true);
             EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
             EditorApplication.OpenProject(Path.Combine(Application.dataPath, ".."));
         }
