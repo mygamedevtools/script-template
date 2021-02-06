@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEditor;
 using System.Globalization;
 
-namespace UnityTools.CustomScriptTemplate
+namespace MyUnityTools.CustomScriptTemplate
 {
     /// <summary>
     /// This class listens to <see cref="UnityEditor.AssetModificationProcessor"/>'s <see cref="OnWillCreateAsset(string)"/> event that executes whenever a new asset is created
