@@ -9,7 +9,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using System.IO;
 
-namespace CustomScriptTemplate
+namespace UnityTools.CustomScriptTemplate
 {
     /// <summary>
     /// Controls the settings of the Script Templates and the Visual of the <see cref="EditorWindow"/> for Custom Script Templates
