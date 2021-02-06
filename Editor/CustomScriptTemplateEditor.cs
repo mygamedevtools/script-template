@@ -19,15 +19,15 @@ namespace MyUnityTools.CustomScriptTemplate
         /// <summary>
         /// The name of the <see cref="authorName"/> string field saved on <see cref="EditorPrefs"/>
         /// </summary>
-        public const string AuthorNameField = "com.joaoborks.cst.authorName";
+        public const string AuthorNameField = "com.myunitytools.cst.authorName";
         /// <summary>
         /// The name of the <see cref="authorEmail"/> string field saved on <see cref="EditorPrefs"/>
         /// </summary>
-        public const string AuthorEmailField = "com.joaoborks.cst.authorEmail";
+        public const string AuthorEmailField = "com.myunitytools.cst.authorEmail";
         /// <summary>
         /// The name of the <see cref="localGUID"/> string field saved on <see cref="EditorPrefs"/>
         /// </summary>
-        public const string LocalGUIDField = "com.joaoborks.cst.localguid";
+        public const string LocalGUIDField = "com.myunitytools.cst.localguid";
 
         /// <summary>
         /// Reference to the Script Template Object, which is essentialy a <see cref="TextAsset"/>
@@ -55,7 +55,7 @@ namespace MyUnityTools.CustomScriptTemplate
             }
         }
 
-        const string TemplatePath = "Packages/com.joaoborks.customscripttemplate/Editor/81-C# Custom Script-NewBehaviourScript.cs.txt";
+        const string TemplatePath = "Packages/com.myunitytools.customscripttemplate/Editor/81-C# Custom Script-NewBehaviourScript.cs.txt";
 
         static Object scriptTemplate;
         static Object localTemplate;
