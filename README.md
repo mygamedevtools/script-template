@@ -2,7 +2,7 @@
 ![Release](https://img.shields.io/github/v/release/joaoborks/myunitytools-script-template?sort=semver)
 ![Last Commit](https://img.shields.io/github/last-commit/joaoborks/myunitytools-script-template)
 
-Unity Custom Script Template
+My Unity Tools - Custom Script Template
 ===
 
 A simple tool to create your own script template.
