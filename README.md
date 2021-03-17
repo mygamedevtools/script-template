@@ -2,36 +2,21 @@
 ![Release](https://img.shields.io/github/v/release/joaoborks/myunitytools-script-template?sort=semver)
 ![Last Commit](https://img.shields.io/github/last-commit/joaoborks/myunitytools-script-template)
 
-My Unity Tools - Custom Script Template
+My Unity Tools - Script Template
 ===
 
-A simple tool to create your own script template.
+A simple tool to add and manage more script templates.
 
 What's this about?
 ---
 
-This tool adds another Script Template to Unity that will serve as an alternative for the default "C# Script" that I personally always
-modify before writing my scripts. In essence, it adds a signature header on every script with your name, email and creation date. Also,
-it removes the `Start()` and `Update()` methods from the default template. You can customize this behavior to create a template that
-best suits your needs.
+This tool adds custom Script Templates to Unity that will serve as alternatives for the default \"C#Script\" that I personally always modify before writing my scripts.\nIn essence, it adds a signature header on every script with your name, email and creation date. \nAdditionally, it adds templates for others types of scripts rather than just Mono Behaviours. You can customize the templates after they have been copied as well.
 
 Installation
 ---
 
-#### For 2019.1+: [Installing from a git URL](https://docs.unity3d.com/Manual/upm-ui-giturl.html) _(requires [Git](https://git-scm.com/) installed and added to the PATH)_
+#### [Installing from a git URL](https://docs.unity3d.com/Manual/upm-ui-giturl.html) _(requires [Git](https://git-scm.com/) installed and added to the PATH)_
 You can open the Package Manager and then click on the `+` button on the top left corner. From there select `Add package from git URL...`, type `https://github.com/joaoborks/myunitytools-script-template.git` and click `Add`. The package will be imported by the Package Manager.
-
-#### Other Package Manager supported versions: Add manually to manifest
-You should add this to your `manifest.json` under the `Packages` folder on the root of your Unity Project:
-```
-{
-  "dependencies": {
-	"com.joaoborks.customscripttemplate": "https://github.com/joaoborks/myunitytools-script-template.git"
-  }
-}
-```
-
-It will be installed on the next Unity Editor start. Later you will be able to update the tool from the Package Manager Window.
 
 :link: [Unity Official Documentation](https://docs.unity3d.com/Manual/upm-git.html)
 
@@ -69,7 +54,7 @@ But, why?
 ---
 
 I like to have my scripts signed so everyone knows who to ask when they have doubts. Unfortunately with every new version of Unity, 
-I have to redo the tedious process of updating my Script Template manually. I'd very much like to be able to [manage my Script Templates
+I have to redo the tedious process of updating my Script Templates manually. I'd very much like to be able to [manage my Script Templates
 over the Unity Hub](https://forum.unity.com/threads/feature-request-manage-script-templates.532962/), but looks like no one else
 uses it.
 
