@@ -23,31 +23,33 @@ You can open the Package Manager and then click on the `+` button on the top lef
 Usage
 ---
 
-![First image](https://user-images.githubusercontent.com/9505905/65558067-cab4ed80-df0b-11e9-9b96-7185618b4bc9.png)
+![First Image](https://user-images.githubusercontent.com/9505905/111533338-6dd37580-8745-11eb-968d-37102b4b5e5c.png)
 
-From there you can open the **Custom Script Template Editor** Window.
+From `Assets/Script Templates Editor` you can open the **Script Templates Editor** Window.
 
-![Custom Script Template Editor](https://user-images.githubusercontent.com/9505905/92528263-dc67d180-f1fe-11ea-83fa-d8e6fc2fa054.png)
+![Custom Script Template Editor](https://user-images.githubusercontent.com/9505905/111533536-a70be580-8745-11eb-909c-b9a97ee0e311.png)
 
 Here you can set your Author Name and Email to add to your script's signature header. You need to click save to store this data into
 the [Editor Prefs](https://docs.unity3d.com/ScriptReference/EditorPrefs.html). You also have the option to clear the saved data.
 
-Immediately below that the `Custom Template` field is assigned automatically to the loaded script template, and serves as a shortcut for
-you to locate the file. You also have the options to `Edit` this file (that should open the file on your default 
-[External Script Editor](https://docs.unity3d.com/Manual/Preferences.html#External-Tools)) and to `Generate` the script template, that
-copies your custom template to the Editor's Script Tempalte folder and reloads the Editor Application.
+Immediately below that, we have a list of all included Script Templates and you can select them to locate the file.
+You also have two buttons: `Copy to Project` and `Copy to Editor`. The first one will copy all script templates to the current project `Assets/ScriptTemplates` path,
+limiting the script template usage to that project. The other will copy all script templates to your Editor folder, and you will be able to use the templates
+in all projects. However if you don't have this package in a project, it will not replace the `#AUTHOR#` and `#CREATIONDATE#` keywords on the file.
+Also, if you update the Unity Editor version, you will lose the script templates and require to copy them again. This is not necessary if you copy them to your project.
+Both actions of copying to project and to editor will require an editor restart to take effect.
 
 How it works
 ---
 
-The custom Script Template has the keywords `#AUTHOR#` and `#CREATIONDATE#` that will be replaced by the data you entered on the Editor
+The custom Script Templates have the keywords `#AUTHOR#` and `#CREATIONDATE#` that will be replaced by the data you entered on the Editor
 Window and the present date. The keyword `#SCRIPTNAME#` is automatically replaced by Unity. All other keyword recognition and replacing is
 done by the [ScriptKeywordProcessor](Assets/CustomScriptTemplate/Editor/ScriptKeywordProcessor.cs) class.
 
 Customization
 ---
 
-You can customize your Script Template to suit your needs, for example adding default methods or even new keywords to process. Keep in
+You can customize your Script Templates to suit your needs, for example adding default methods or even new keywords to process. Keep in
 mind that if you ever want a feature that it does not have, I may want to include it on this package.
 
 But, why?
