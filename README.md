@@ -2,74 +2,61 @@
 ![Release](https://img.shields.io/github/v/release/joaoborks/myunitytools-script-template?sort=semver)
 ![Last Commit](https://img.shields.io/github/last-commit/joaoborks/myunitytools-script-template)
 
-My Unity Tools - Custom Script Template
+My Unity Tools - Script Template
 ===
 
-A simple tool to create your own script template.
+A simple tool to add and manage more script templates.
 
 What's this about?
 ---
 
-This tool adds another Script Template to Unity that will serve as an alternative for the default "C# Script" that I personally always
-modify before writing my scripts. In essence, it adds a signature header on every script with your name, email and creation date. Also,
-it removes the `Start()` and `Update()` methods from the default template. You can customize this behavior to create a template that
-best suits your needs.
+This tool adds custom Script Templates to Unity that will serve as alternatives for the default \"C#Script\" that I personally always modify before writing my scripts.\nIn essence, it adds a signature header on every script with your name, email and creation date. \nAdditionally, it adds templates for others types of scripts rather than just Mono Behaviours. You can customize the templates after they have been copied as well.
 
 Installation
 ---
 
-#### For 2019.1+: [Installing from a git URL](https://docs.unity3d.com/Manual/upm-ui-giturl.html) _(requires [Git](https://git-scm.com/) installed and added to the PATH)_
+#### [Installing from a git URL](https://docs.unity3d.com/Manual/upm-ui-giturl.html) _(requires [Git](https://git-scm.com/) installed and added to the PATH)_
 You can open the Package Manager and then click on the `+` button on the top left corner. From there select `Add package from git URL...`, type `https://github.com/joaoborks/myunitytools-script-template.git` and click `Add`. The package will be imported by the Package Manager.
-
-#### Other Package Manager supported versions: Add manually to manifest
-You should add this to your `manifest.json` under the `Packages` folder on the root of your Unity Project:
-```
-{
-  "dependencies": {
-	"com.joaoborks.customscripttemplate": "https://github.com/joaoborks/myunitytools-script-template.git"
-  }
-}
-```
-
-It will be installed on the next Unity Editor start. Later you will be able to update the tool from the Package Manager Window.
 
 :link: [Unity Official Documentation](https://docs.unity3d.com/Manual/upm-git.html)
 
 Usage
 ---
 
-![First image](https://user-images.githubusercontent.com/9505905/65558067-cab4ed80-df0b-11e9-9b96-7185618b4bc9.png)
+![First Image](https://user-images.githubusercontent.com/9505905/111533338-6dd37580-8745-11eb-968d-37102b4b5e5c.png)
 
-From there you can open the **Custom Script Template Editor** Window.
+From `Assets/Script Templates Editor` you can open the **Script Templates Editor** Window.
 
-![Custom Script Template Editor](https://user-images.githubusercontent.com/9505905/92528263-dc67d180-f1fe-11ea-83fa-d8e6fc2fa054.png)
+![Custom Script Template Editor](https://user-images.githubusercontent.com/9505905/111533536-a70be580-8745-11eb-909c-b9a97ee0e311.png)
 
 Here you can set your Author Name and Email to add to your script's signature header. You need to click save to store this data into
 the [Editor Prefs](https://docs.unity3d.com/ScriptReference/EditorPrefs.html). You also have the option to clear the saved data.
 
-Immediately below that the `Custom Template` field is assigned automatically to the loaded script template, and serves as a shortcut for
-you to locate the file. You also have the options to `Edit` this file (that should open the file on your default 
-[External Script Editor](https://docs.unity3d.com/Manual/Preferences.html#External-Tools)) and to `Generate` the script template, that
-copies your custom template to the Editor's Script Tempalte folder and reloads the Editor Application.
+Immediately below that, we have a list of all included Script Templates and you can select them to locate the file.
+You also have two buttons: `Copy to Project` and `Copy to Editor`. The first one will copy all script templates to the current project `Assets/ScriptTemplates` path,
+limiting the script template usage to that project. The other will copy all script templates to your Editor folder, and you will be able to use the templates
+in all projects. However if you don't have this package in a project, it will not replace the `#AUTHOR#` and `#CREATIONDATE#` keywords on the file.
+Also, if you update the Unity Editor version, you will lose the script templates and require to copy them again. This is not necessary if you copy them to your project.
+Both actions of copying to project and to editor will require an editor restart to take effect.
 
 How it works
 ---
 
-The custom Script Template has the keywords `#AUTHOR#` and `#CREATIONDATE#` that will be replaced by the data you entered on the Editor
+The custom Script Templates have the keywords `#AUTHOR#` and `#CREATIONDATE#` that will be replaced by the data you entered on the Editor
 Window and the present date. The keyword `#SCRIPTNAME#` is automatically replaced by Unity. All other keyword recognition and replacing is
 done by the [ScriptKeywordProcessor](Assets/CustomScriptTemplate/Editor/ScriptKeywordProcessor.cs) class.
 
 Customization
 ---
 
-You can customize your Script Template to suit your needs, for example adding default methods or even new keywords to process. Keep in
+You can customize your Script Templates to suit your needs, for example adding default methods or even new keywords to process. Keep in
 mind that if you ever want a feature that it does not have, I may want to include it on this package.
 
 But, why?
 ---
 
 I like to have my scripts signed so everyone knows who to ask when they have doubts. Unfortunately with every new version of Unity, 
-I have to redo the tedious process of updating my Script Template manually. I'd very much like to be able to [manage my Script Templates
+I have to redo the tedious process of updating my Script Templates manually. I'd very much like to be able to [manage my Script Templates
 over the Unity Hub](https://forum.unity.com/threads/feature-request-manage-script-templates.532962/), but looks like no one else
 uses it.
 

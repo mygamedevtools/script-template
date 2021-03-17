@@ -1,0 +1,17 @@
+﻿:root {
+    padding: 1px;
+}
+
+.bold {
+    -unity-font-style: bold;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.button-group {
+    flex-direction: row;
+}
+
+.button-group > Button, TemplateContainer, #template-list {
+    flex-grow: 1;
+}
