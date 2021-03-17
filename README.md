@@ -10,7 +10,7 @@ A simple tool to add and manage more script templates.
 What's this about?
 ---
 
-This tool adds custom Script Templates to Unity that will serve as alternatives for the default \"C#Script\" that I personally always modify before writing my scripts.\nIn essence, it adds a signature header on every script with your name, email and creation date. \nAdditionally, it adds templates for others types of scripts rather than just Mono Behaviours. You can customize the templates after they have been copied as well.
+This tool adds custom Script Templates to Unity that will serve as alternatives for the default \"C#Script\" that I personally always modify before writing my scripts. In essence, it adds a signature header on every script with your name, email and creation date. Additionally, it adds templates for others types of scripts rather than just Mono Behaviours. You can customize the templates after they have been copied as well.
 
 Installation
 ---
