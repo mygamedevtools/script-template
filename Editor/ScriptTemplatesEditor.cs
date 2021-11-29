@@ -109,9 +109,17 @@ namespace MyUnityTools.ScriptTemplates
             };
             listView.bindItem = (element, i) => (element as ObjectField).SetValueWithoutNotify(templates[i]);
             listView.itemsSource = templates;
+#if UNITY_2021_2_OR_NEWER
+            listView.fixedItemHeight = 20;
+#else
             listView.itemHeight = 20;
+#endif
             listView.selectionType = SelectionType.Single;
+#if UNITY_2021_2_OR_NEWER
+            listView.onSelectionChange += selection => Selection.activeObject = (Object)selection.FirstOrDefault();
+#else
             listView.onSelectionChanged += selection => Selection.activeObject = (Object)selection.FirstOrDefault();
+#endif
 
             var projectButton = rootVisualElement.Q<Button>("copy-project-button");
             projectButton.clicked += () =>
