@@ -3,6 +3,9 @@ Change Log
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.2.0] - 2022-09-13
+- Added: Support for ISO date format by default.
+
 ## [2.1.0] - 2022-09-13
 - Changed: Moved repository to My Unity Tools organization
 - Changed: Updated package name and author.
@@ -39,6 +42,7 @@ All notable changes to this project will be documented in this file. This projec
 ## [1.0.0] - 2019-07-27
 - Initial Asset Store release.
 
+[2.2.0]: https://github.com/myunitytools/script-template/compare/2.1.0...2.2.0
 [2.1.0]: https://github.com/myunitytools/script-template/compare/2.0.1...2.1.0
 [2.0.1]: https://github.com/myunitytools/script-template/compare/2.0.0...2.0.1
 [2.0.0]: https://github.com/myunitytools/script-template/compare/1.3.0...2.0.0
