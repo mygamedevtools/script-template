@@ -1,7 +1,7 @@
 /**
  * CustomScriptTemplateEditor.cs
  * Created by: João Borks [joao.borks@gmail.com]
- * Created on: 7/13/2019 (en-US)
+ * Created on: 2019-07-13
  */
 
 using System.IO;
@@ -19,29 +19,34 @@ namespace MyUnityTools.ScriptTemplates
         /// <summary>
         /// The name of the <see cref="authorName"/> string field saved on <see cref="EditorPrefs"/>
         /// </summary>
-        public const string AuthorNameField = "com.myunitytools.cst.authorName";
+        public const string AuthorNameKey = "com.myunitytools.cst.authorName";
         /// <summary>
         /// The name of the <see cref="authorEmail"/> string field saved on <see cref="EditorPrefs"/>
         /// </summary>
-        public const string AuthorEmailField = "com.myunitytools.cst.authorEmail";
+        public const string AuthorEmailKey = "com.myunitytools.cst.authorEmail";
+        /// <summary>
+        /// Should the date be formatted in the current locale or in the default ISO format?
+        /// </summary>
+        public const string UseLocalDateKey = "com.myunitytools.cst.localdate";
         /// <summary>
         /// The name of the <see cref="localGUID"/> string field saved on <see cref="EditorPrefs"/>
         /// </summary>
-        public const string LocalGUIDField = "com.myunitytools.cst.localguid";
+        public const string LocalGUIDKey = "com.myunitytools.cst.localguid";
         /// <summary>
         /// Package path for accessing script templates and visual elements
         /// </summary>
-        public const string PackageRootPath = "Packages/com.myunitytools.scripttemplate/";
+        public const string PackageRootPath = "Packages/com.myunitytools.script-template/";
         /// <summary>
         /// Project path for storing script templates
         /// </summary>
         public const string LocalTemplatesPath = "Assets/ScriptTemplates/";
+
         /// <summary>
         /// Editor path for storing script templates
         /// </summary>
         public static readonly string EditorTemplatesPath = EditorApplication.applicationPath.Replace("Unity.exe", "") + "/Data/Resources/ScriptTemplates/";
 
-        const string EditorRestartMesssage = "Copying Script Templates will requre Editor restart in order to apply the changes. Do you want to restart now?";
+        const string _editorRestartMesssage = "Copying Script Templates will requre Editor restart in order to apply the changes. Do you want to restart now?";
 
         [MenuItem("Assets/Script Templates Editor", false, 800)]
         public static void ShowWindow() => GetWindow<ScriptTemplatesEditor>("Script Templates").minSize = new Vector2(300, 250);
@@ -62,19 +67,24 @@ namespace MyUnityTools.ScriptTemplates
             var saveButton = rootVisualElement.Q<Button>("save-button");
 
             var authorField = rootVisualElement.Q<TextField>("author");
-            authorField.SetValueWithoutNotify(EditorPrefs.GetString(AuthorNameField, string.Empty));
+            authorField.SetValueWithoutNotify(EditorPrefs.GetString(AuthorNameKey, string.Empty));
             authorField.RegisterValueChangedCallback(e => saveButton.SetEnabled(!isAuthorUpdated(e.newValue) && !string.IsNullOrEmpty(authorField.value)));
 
             var emailField = rootVisualElement.Q<TextField>("email");
-            emailField.SetValueWithoutNotify(EditorPrefs.GetString(AuthorEmailField, string.Empty));
+            emailField.SetValueWithoutNotify(EditorPrefs.GetString(AuthorEmailKey, string.Empty));
             emailField.RegisterValueChangedCallback(e => saveButton.SetEnabled(!isEmailUpdated(e.newValue) && !string.IsNullOrEmpty(authorField.value)));
 
+            var localDateToggle = rootVisualElement.Q<Toggle>("localdate");
+            localDateToggle.SetValueWithoutNotify(EditorPrefs.GetBool(UseLocalDateKey, false));
+            localDateToggle.RegisterValueChangedCallback(e => saveButton.SetEnabled(!isLocalDateUpdated(e.newValue)));
+
             var clearButton = rootVisualElement.Q<Button>("clear-button");
-            clearButton.SetEnabled(EditorPrefs.HasKey(AuthorNameField) || EditorPrefs.HasKey(AuthorEmailField));
+            clearButton.SetEnabled(EditorPrefs.HasKey(AuthorNameKey) || EditorPrefs.HasKey(AuthorEmailKey));
             clearButton.clicked += () =>
             {
-                EditorPrefs.DeleteKey(AuthorNameField);
-                EditorPrefs.DeleteKey(AuthorEmailField);
+                EditorPrefs.DeleteKey(AuthorNameKey);
+                EditorPrefs.DeleteKey(AuthorEmailKey);
+                EditorPrefs.DeleteKey(UseLocalDateKey);
                 saveButton.SetEnabled(!string.IsNullOrEmpty(authorField.value));
                 clearButton.SetEnabled(false);
             };
@@ -82,15 +92,18 @@ namespace MyUnityTools.ScriptTemplates
             saveButton.SetEnabled(false);
             saveButton.clicked += () =>
             {
-                EditorPrefs.SetString(AuthorNameField, authorField.value);
-                EditorPrefs.SetString(AuthorEmailField, emailField.value);
+                EditorPrefs.SetString(AuthorNameKey, authorField.value);
+                EditorPrefs.SetString(AuthorEmailKey, emailField.value);
+                EditorPrefs.SetBool(UseLocalDateKey, localDateToggle.value);
                 saveButton.SetEnabled(false);
                 clearButton.SetEnabled(true);
             };
 
-            bool isAuthorUpdated(string author) => author == EditorPrefs.GetString(AuthorNameField, string.Empty);
+            bool isAuthorUpdated(string author) => author == EditorPrefs.GetString(AuthorNameKey, string.Empty);
 
-            bool isEmailUpdated(string email) => email == EditorPrefs.GetString(AuthorEmailField, string.Empty);
+            bool isEmailUpdated(string email) => email == EditorPrefs.GetString(AuthorEmailKey, string.Empty);
+
+            bool isLocalDateUpdated(bool value) => value == EditorPrefs.GetBool(UseLocalDateKey, false);
         }
 
         void DrawTemplateView()
@@ -124,7 +137,7 @@ namespace MyUnityTools.ScriptTemplates
             var projectButton = rootVisualElement.Q<Button>("copy-project-button");
             projectButton.clicked += () =>
             {
-                var shouldRestart = EditorUtility.DisplayDialog("Editor Restart", EditorRestartMesssage, "Yes", "No");
+                var shouldRestart = EditorUtility.DisplayDialog("Editor Restart", _editorRestartMesssage, "Yes", "No");
                 var length = templates.Length;
                 if (!AssetDatabase.IsValidFolder(LocalTemplatesPath))
                     AssetDatabase.CreateFolder("Assets", "ScriptTemplates");
@@ -137,7 +150,7 @@ namespace MyUnityTools.ScriptTemplates
             var editorButton = rootVisualElement.Q<Button>("copy-editor-button");
             editorButton.clicked += () =>
             {
-                var shouldRestart = EditorUtility.DisplayDialog("Editor Restart", EditorRestartMesssage, "Yes", "No");
+                var shouldRestart = EditorUtility.DisplayDialog("Editor Restart", _editorRestartMesssage, "Yes", "No");
                 var length = templates.Length;
                 for (int i = 0; i < length; i++)
                     File.Copy(AssetDatabase.GetAssetPath(templates[i]), EditorTemplatesPath + templates[i].name + ".txt");
