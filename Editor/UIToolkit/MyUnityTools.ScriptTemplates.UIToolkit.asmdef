@@ -1,5 +1,6 @@
 {
-    "name": "MyUnityTools.CustomScriptTemplate.Editor",
+    "name": "MyUnityTools.ScriptTemplates.UIToolkit",
+    "rootNamespace": "",
     "references": [],
     "includePlatforms": [
         "Editor"

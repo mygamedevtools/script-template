@@ -1,12 +1,21 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:Label text="Signature Info" class="bold" />
-    <ui:TextField name="author" label="Author" />
-    <ui:TextField name="email" label="Email (optional)" />
-    <ui:Toggle label="Use Local Date" name="localdate" />
-    <ui:VisualElement class="button-group">
-        <ui:Button name="clear-button" text="Clear" />
-        <ui:Button name="save-button" text="Save" />
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Packages/com.myunitytools.script-template/UIToolkit/Styles.uss?fileID=7433441132597879392&amp;guid=f4c42f998c91eb24e88b3e8659ad04ca&amp;type=3#Styles" />
+    <ui:VisualElement name="preview-group">
+        <ui:VisualElement class="code-block">
+            <ui:Label text="#TEMPLATE#" name="preview-template" class="code-block-text" />
+        </ui:VisualElement>
     </ui:VisualElement>
+    <MyUnityTools.ScriptTemplates.UIToolkit.Module title="Signature" name="signature-module">
+        <ui:VisualElement name="signature-group">
+            <ui:Toggle label="Use Local Date" name="localdate" />
+            <ui:TextField name="email" label="Email (optional)" />
+            <ui:TextField name="author" label="Author" />
+            <ui:VisualElement class="button-group">
+                <ui:Button name="clear-button" text="Clear" />
+                <ui:Button name="save-button" text="Save" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </MyUnityTools.ScriptTemplates.UIToolkit.Module>
     <ui:Label text="Templates" class="bold" />
     <ui:VisualElement class="button-group">
         <ui:Button name="copy-project-button" text="Copy to Project" />

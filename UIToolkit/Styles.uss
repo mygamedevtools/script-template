@@ -1,0 +1,76 @@
+:root {
+    padding: 1px;
+}
+
+TemplateContainer {
+    flex-grow: 1;
+}
+
+#template-list {
+    flex-grow: 1;
+}
+
+.bold {
+    -unity-font-style: bold;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.button-group {
+    flex-direction: row;
+}
+
+.button-group > Button {
+    flex-grow: 1;
+}
+
+.code-block {
+    margin-left: 4px;
+    margin-right: 4px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    background-color: rgb(30, 30, 30);
+}
+
+.code-block-text {
+    color: rgb(220, 220, 220);
+    -unity-font-definition: none;
+    -unity-font: url('project://database/Packages/com.myunitytools.script-template/UIToolkit/Fonts/CascadiaMono.ttf?fileID=12800000&guid=a12df06876b06fe43b7283dde6fcd935&type=3#CascadiaMono');
+    overflow: hidden;
+    -unity-font-style: bold;
+}
+
+.hidden {
+    display: none;
+}
+
+.module-header {
+    flex-direction: row;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-top-width: 1px;
+    border-top-color: var(--unity-colors-default-border);
+    border-bottom-color: var(--unity-colors-default-border);
+    border-bottom-width: 1px;
+    margin-bottom: -1px;
+    background-color: var(--unity-colors-inspector_titlebar-background);
+}
+
+.module-header__toggle {
+    margin-right: 8px;
+}
+
+.module-header__title {
+    -unity-font-style: bold;
+}
+
+.module-content {
+    padding-left: 16px;
+    padding-top: 4px;
+    padding-bottom: 8px;
+    padding-right: 8px;
+}

@@ -47,36 +47,50 @@ namespace MyUnityTools.ScriptTemplates
         public static readonly string EditorTemplatesPath = EditorApplication.applicationPath.Replace("Unity.exe", "") + "/Data/Resources/ScriptTemplates/";
 
         const string _editorRestartMesssage = "Copying Script Templates will requre Editor restart in order to apply the changes. Do you want to restart now?";
+        const string _previewTemplate = "<color=#608B4E>#SIGNATURE#</color><color=#569cd6>public class</color> <color=#4ec9b0>#SCRIPTNAME#</color>\n{\n}";
 
         [MenuItem("Assets/Script Templates Editor", false, 800)]
-        public static void ShowWindow() => GetWindow<ScriptTemplatesEditor>("Script Templates").minSize = new Vector2(300, 250);
+        public static void ShowWindow() => GetWindow<ScriptTemplatesEditor>("Script Templates").minSize = new Vector2(400, 450);
 
         void OnEnable()
         {
             var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(PackageRootPath + "UIToolkit/ScriptTemplateWindow.uxml");
             rootVisualElement.Add(visualTree.CloneTree());
-            var styles = AssetDatabase.LoadAssetAtPath<StyleSheet>(PackageRootPath + "UIToolkit/Styles/ScriptTemplateStyles.uss");
-            rootVisualElement.styleSheets.Add(styles);
 
-            DrawInfoView();
+            DrawSignatureView();
             DrawTemplateView();
         }
 
-        void DrawInfoView()
+        void DrawSignatureView()
         {
             var saveButton = rootVisualElement.Q<Button>("save-button");
 
+            var previewLabel = rootVisualElement.Q<Label>("preview-template");
+            updatePreviewLabel();
+
             var authorField = rootVisualElement.Q<TextField>("author");
             authorField.SetValueWithoutNotify(EditorPrefs.GetString(AuthorNameKey, string.Empty));
-            authorField.RegisterValueChangedCallback(e => saveButton.SetEnabled(!isAuthorUpdated(e.newValue) && !string.IsNullOrEmpty(authorField.value)));
+            authorField.RegisterValueChangedCallback(e =>
+            {
+                saveButton.SetEnabled(!isAuthorUpdated(e.newValue) && !string.IsNullOrEmpty(authorField.value));
+                updatePreviewLabel();
+            });
 
             var emailField = rootVisualElement.Q<TextField>("email");
             emailField.SetValueWithoutNotify(EditorPrefs.GetString(AuthorEmailKey, string.Empty));
-            emailField.RegisterValueChangedCallback(e => saveButton.SetEnabled(!isEmailUpdated(e.newValue) && !string.IsNullOrEmpty(authorField.value)));
+            emailField.RegisterValueChangedCallback(e =>
+            {
+                saveButton.SetEnabled(!isEmailUpdated(e.newValue) && !string.IsNullOrEmpty(emailField.value));
+                updatePreviewLabel();
+            });
 
             var localDateToggle = rootVisualElement.Q<Toggle>("localdate");
             localDateToggle.SetValueWithoutNotify(EditorPrefs.GetBool(UseLocalDateKey, false));
-            localDateToggle.RegisterValueChangedCallback(e => saveButton.SetEnabled(!isLocalDateUpdated(e.newValue)));
+            localDateToggle.RegisterValueChangedCallback(e =>
+            {
+                saveButton.SetEnabled(!isLocalDateUpdated(e.newValue));
+                updatePreviewLabel();
+            });
 
             var clearButton = rootVisualElement.Q<Button>("clear-button");
             clearButton.SetEnabled(EditorPrefs.HasKey(AuthorNameKey) || EditorPrefs.HasKey(AuthorEmailKey));
@@ -98,6 +112,8 @@ namespace MyUnityTools.ScriptTemplates
                 saveButton.SetEnabled(false);
                 clearButton.SetEnabled(true);
             };
+
+            void updatePreviewLabel() => previewLabel.text = ScriptKeywordReplacer.ProcessScriptTemplate(_previewTemplate, "ExampleScript");
 
             bool isAuthorUpdated(string author) => author == EditorPrefs.GetString(AuthorNameKey, string.Empty);
 
