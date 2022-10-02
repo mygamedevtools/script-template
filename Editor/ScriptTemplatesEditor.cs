@@ -4,6 +4,8 @@
  * Created on: 2019-07-13
  */
 
+using MyUnityTools.ScriptTemplates.UIToolkit;
+using System;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -14,31 +16,58 @@ using UnityEngine.UIElements;
 
 namespace MyUnityTools.ScriptTemplates
 {
+    [Serializable]
+    public struct SignatureSettings
+    {
+        public bool Enabled;
+        public string AuthorName;
+        public string AuthorEmail;
+        public bool UseLocalDateFormat;
+
+        public override bool Equals(object obj)
+        {
+            return obj is SignatureSettings settings &&
+                   Enabled == settings.Enabled &&
+                   AuthorName == settings.AuthorName &&
+                   AuthorEmail == settings.AuthorEmail &&
+                   UseLocalDateFormat == settings.UseLocalDateFormat;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Enabled, AuthorName, AuthorEmail, UseLocalDateFormat);
+        }
+
+        public bool IsEmpty() => this == default;
+
+        public static bool operator ==(SignatureSettings left, SignatureSettings right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(SignatureSettings left, SignatureSettings right)
+        {
+            return !(left == right);
+        }
+    }
+
+    [Serializable]
+    public class ScriptTemplateSettings
+    {
+        const string _editorPrefsKey = "com.myunitytools.script-template:settings";
+
+        public SignatureSettings Signature;
+
+        public void SaveToEditorPrefs() => EditorPrefs.SetString(_editorPrefsKey, JsonUtility.ToJson(this));
+
+        public void DeleteEditorPrefs() => EditorPrefs.DeleteKey(_editorPrefsKey);
+
+        public static ScriptTemplateSettings FromEditorPrefs() => JsonUtility.FromJson<ScriptTemplateSettings>(EditorPrefs.GetString(_editorPrefsKey, "{}"));
+    }
+
     public class ScriptTemplatesEditor : EditorWindow
     {
-        /// <summary>
-        /// The name of the <see cref="authorName"/> string field saved on <see cref="EditorPrefs"/>
-        /// </summary>
-        public const string AuthorNameKey = "com.myunitytools.cst.authorName";
-        /// <summary>
-        /// The name of the <see cref="authorEmail"/> string field saved on <see cref="EditorPrefs"/>
-        /// </summary>
-        public const string AuthorEmailKey = "com.myunitytools.cst.authorEmail";
-        /// <summary>
-        /// Should the date be formatted in the current locale or in the default ISO format?
-        /// </summary>
-        public const string UseLocalDateKey = "com.myunitytools.cst.localdate";
-        /// <summary>
-        /// The name of the <see cref="localGUID"/> string field saved on <see cref="EditorPrefs"/>
-        /// </summary>
-        public const string LocalGUIDKey = "com.myunitytools.cst.localguid";
-        /// <summary>
-        /// Package path for accessing script templates and visual elements
-        /// </summary>
         public const string PackageRootPath = "Packages/com.myunitytools.script-template/";
-        /// <summary>
-        /// Project path for storing script templates
-        /// </summary>
         public const string LocalTemplatesPath = "Assets/ScriptTemplates/";
 
         /// <summary>
@@ -49,6 +78,10 @@ namespace MyUnityTools.ScriptTemplates
         const string _editorRestartMesssage = "Copying Script Templates will requre Editor restart in order to apply the changes. Do you want to restart now?";
         const string _previewTemplate = "<color=#608B4E>#SIGNATURE#</color><color=#569cd6>public class</color> <color=#4ec9b0>#SCRIPTNAME#</color>\n{\n}";
 
+        ScriptTemplateSettings _cachedTemplateSettings;
+        ScriptTemplateSettings _previewTemplateSettings;
+        ScriptKeywordReplacer _keywordReplacer;
+
         [MenuItem("Assets/Script Templates Editor", false, 800)]
         public static void ShowWindow() => GetWindow<ScriptTemplatesEditor>("Script Templates").minSize = new Vector2(400, 450);
 
@@ -57,69 +90,72 @@ namespace MyUnityTools.ScriptTemplates
             var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(PackageRootPath + "UIToolkit/ScriptTemplateWindow.uxml");
             rootVisualElement.Add(visualTree.CloneTree());
 
+            _cachedTemplateSettings = ScriptTemplateSettings.FromEditorPrefs();
+            _previewTemplateSettings = new ScriptTemplateSettings()
+            {
+                Signature = _cachedTemplateSettings.Signature
+            };
+            _keywordReplacer = new ScriptKeywordReplacer(_previewTemplateSettings);
+
             DrawSignatureView();
             DrawTemplateView();
         }
 
         void DrawSignatureView()
         {
-            var saveButton = rootVisualElement.Q<Button>("save-button");
-
             var previewLabel = rootVisualElement.Q<Label>("preview-template");
-            updatePreviewLabel();
+            var saveButton = rootVisualElement.Q<Button>("save-button");
+            var clearButton = rootVisualElement.Q<Button>("clear-button");
+
+            var signatureModule = rootVisualElement.Q<Module>("signature-module");
+            signatureModule.SetValueWithoutNotify(_previewTemplateSettings.Signature.Enabled);
 
             var authorField = rootVisualElement.Q<TextField>("author");
-            authorField.SetValueWithoutNotify(EditorPrefs.GetString(AuthorNameKey, string.Empty));
-            authorField.RegisterValueChangedCallback(e =>
-            {
-                saveButton.SetEnabled(!isAuthorUpdated(e.newValue) && !string.IsNullOrEmpty(authorField.value));
-                updatePreviewLabel();
-            });
+            authorField.SetValueWithoutNotify(_previewTemplateSettings.Signature.AuthorName);
 
             var emailField = rootVisualElement.Q<TextField>("email");
-            emailField.SetValueWithoutNotify(EditorPrefs.GetString(AuthorEmailKey, string.Empty));
-            emailField.RegisterValueChangedCallback(e =>
-            {
-                saveButton.SetEnabled(!isEmailUpdated(e.newValue) && !string.IsNullOrEmpty(emailField.value));
-                updatePreviewLabel();
-            });
+            emailField.SetValueWithoutNotify(_previewTemplateSettings.Signature.AuthorEmail);
 
             var localDateToggle = rootVisualElement.Q<Toggle>("localdate");
-            localDateToggle.SetValueWithoutNotify(EditorPrefs.GetBool(UseLocalDateKey, false));
-            localDateToggle.RegisterValueChangedCallback(e =>
-            {
-                saveButton.SetEnabled(!isLocalDateUpdated(e.newValue));
-                updatePreviewLabel();
-            });
+            localDateToggle.SetValueWithoutNotify(_previewTemplateSettings.Signature.UseLocalDateFormat);
 
-            var clearButton = rootVisualElement.Q<Button>("clear-button");
-            clearButton.SetEnabled(EditorPrefs.HasKey(AuthorNameKey) || EditorPrefs.HasKey(AuthorEmailKey));
+            clearButton.SetEnabled(!_cachedTemplateSettings.Signature.IsEmpty());
             clearButton.clicked += () =>
             {
-                EditorPrefs.DeleteKey(AuthorNameKey);
-                EditorPrefs.DeleteKey(AuthorEmailKey);
-                EditorPrefs.DeleteKey(UseLocalDateKey);
-                saveButton.SetEnabled(!string.IsNullOrEmpty(authorField.value));
+                _cachedTemplateSettings.Signature = new SignatureSettings();
+                _cachedTemplateSettings.DeleteEditorPrefs();
+                saveButton.SetEnabled(_cachedTemplateSettings.Signature != _previewTemplateSettings.Signature);
                 clearButton.SetEnabled(false);
             };
+
+            signatureModule.RegisterValueChangedCallback(e => updatePreview());
+            authorField.RegisterValueChangedCallback(e => updatePreview());
+            emailField.RegisterValueChangedCallback(e => updatePreview());
+            localDateToggle.RegisterValueChangedCallback(e => updatePreview());
 
             saveButton.SetEnabled(false);
             saveButton.clicked += () =>
             {
-                EditorPrefs.SetString(AuthorNameKey, authorField.value);
-                EditorPrefs.SetString(AuthorEmailKey, emailField.value);
-                EditorPrefs.SetBool(UseLocalDateKey, localDateToggle.value);
+                _cachedTemplateSettings.Signature = _previewTemplateSettings.Signature;
+                _previewTemplateSettings.SaveToEditorPrefs();
                 saveButton.SetEnabled(false);
-                clearButton.SetEnabled(true);
+                clearButton.SetEnabled(!_cachedTemplateSettings.Signature.IsEmpty());
             };
 
-            void updatePreviewLabel() => previewLabel.text = ScriptKeywordReplacer.ProcessScriptTemplate(_previewTemplate, "ExampleScript");
+            updatePreview();
 
-            bool isAuthorUpdated(string author) => author == EditorPrefs.GetString(AuthorNameKey, string.Empty);
-
-            bool isEmailUpdated(string email) => email == EditorPrefs.GetString(AuthorEmailKey, string.Empty);
-
-            bool isLocalDateUpdated(bool value) => value == EditorPrefs.GetBool(UseLocalDateKey, false);
+            void updatePreview()
+            {
+                _previewTemplateSettings.Signature = new SignatureSettings
+                {
+                    Enabled = signatureModule.value,
+                    AuthorName = authorField.value,
+                    AuthorEmail = emailField.value,
+                    UseLocalDateFormat = localDateToggle.value
+                };
+                previewLabel.text = _keywordReplacer.ProcessScriptTemplate(_previewTemplate, "ExampleScript");
+                saveButton.SetEnabled(_cachedTemplateSettings.Signature != _previewTemplateSettings.Signature);
+            }
         }
 
         void DrawTemplateView()
@@ -145,9 +181,9 @@ namespace MyUnityTools.ScriptTemplates
 #endif
             listView.selectionType = SelectionType.Single;
 #if UNITY_2021_2_OR_NEWER
-            listView.onSelectionChange += selection => Selection.activeObject = (Object)selection.FirstOrDefault();
+            listView.onSelectionChange += selection => Selection.activeObject = (UnityEngine.Object)selection.FirstOrDefault();
 #else
-            listView.onSelectionChanged += selection => Selection.activeObject = (Object)selection.FirstOrDefault();
+            listView.onSelectionChanged += selection => Selection.activeObject = (UnityEngine.Object)selection.FirstOrDefault();
 #endif
 
             var projectButton = rootVisualElement.Q<Button>("copy-project-button");

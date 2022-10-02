@@ -5,11 +5,10 @@
  */
 
 using System.Globalization;
-using UnityEditor;
 
 namespace MyUnityTools.ScriptTemplates
 {
-    public static class ScriptKeywordReplacer
+    public class ScriptKeywordReplacer
     {
         const string _scriptNameKeyword = "#SCRIPTNAME#";
         const string _signatureKeyword = "#SIGNATURE#";
@@ -23,17 +22,25 @@ namespace MyUnityTools.ScriptTemplates
             " * Created on: " + _dateKeyword + "\n" +
             " */\n\n";
 
-        public static string AuthorString => $"{EditorPrefs.GetString(ScriptTemplatesEditor.AuthorNameKey)}{(EditorPrefs.HasKey(ScriptTemplatesEditor.AuthorEmailKey) ? $" [{EditorPrefs.GetString(ScriptTemplatesEditor.AuthorEmailKey)}]" : string.Empty)}";
-        public static string DateString => EditorPrefs.GetBool(ScriptTemplatesEditor.UseLocalDateKey, false) ? $"{System.DateTime.Now.ToString("d", CultureInfo.CurrentCulture)} ({CultureInfo.CurrentCulture.Name})" : System.DateTime.Now.ToString("yyyy-MM-dd");
+        public string AuthorString => $"{_templateSettings.Signature.AuthorName}{(!string.IsNullOrWhiteSpace(_templateSettings.Signature.AuthorEmail) ? $" [{_templateSettings.Signature.AuthorEmail}]" : string.Empty)}";
+        public string DateString => _templateSettings.Signature.UseLocalDateFormat ? $"{System.DateTime.Now.ToString("d", CultureInfo.CurrentCulture)} ({CultureInfo.CurrentCulture.Name})" : System.DateTime.Now.ToString("yyyy-MM-dd");
 
-        public static string GetSignatureText(string scriptName)
+        readonly ScriptTemplateSettings _templateSettings;
+
+        public ScriptKeywordReplacer(ScriptTemplateSettings templateSettings)
         {
-            return _signatureTemplate.Replace(_authorKeyword, AuthorString).Replace(_dateKeyword, DateString);
+            _templateSettings = templateSettings;
         }
 
-        public static string ProcessScriptTemplate(string template, string scriptName)
+        public string ReplaceSignature()
         {
-            return template.Replace(_signatureKeyword, GetSignatureText(scriptName))
+            return _templateSettings.Signature.Enabled ? _signatureTemplate.Replace(_authorKeyword, AuthorString).Replace(_dateKeyword, DateString) : string.Empty;
+        }
+
+        public string ProcessScriptTemplate(string template, string scriptName)
+        {
+            return template
+                .Replace(_signatureKeyword, ReplaceSignature())
                 .Replace(_scriptNameKeyword, scriptName);
         }
     }

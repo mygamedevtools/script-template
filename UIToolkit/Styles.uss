@@ -10,10 +10,12 @@ TemplateContainer {
     flex-grow: 1;
 }
 
-.bold {
+.header {
     -unity-font-style: bold;
-    margin-top: 10px;
-    margin-bottom: 5px;
+    margin-top: 8px;
+    margin-bottom: 4px;
+    padding-left: 2px;
+    font-size: 14px;
 }
 
 .button-group {

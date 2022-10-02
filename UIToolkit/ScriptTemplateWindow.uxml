@@ -5,18 +5,19 @@
             <ui:Label text="#TEMPLATE#" name="preview-template" class="code-block-text" />
         </ui:VisualElement>
     </ui:VisualElement>
-    <MyUnityTools.ScriptTemplates.UIToolkit.Module title="Signature" name="signature-module">
+    <ui:Label text="Settings" class="header" />
+    <MyUnityTools.ScriptTemplates.UIToolkit.Module title="Signature" name="signature-module" enabled="true">
         <ui:VisualElement name="signature-group">
             <ui:Toggle label="Use Local Date" name="localdate" />
-            <ui:TextField name="email" label="Email (optional)" />
             <ui:TextField name="author" label="Author" />
-            <ui:VisualElement class="button-group">
-                <ui:Button name="clear-button" text="Clear" />
-                <ui:Button name="save-button" text="Save" />
-            </ui:VisualElement>
+            <ui:TextField name="email" label="Email (optional)" />
         </ui:VisualElement>
     </MyUnityTools.ScriptTemplates.UIToolkit.Module>
-    <ui:Label text="Templates" class="bold" />
+    <ui:VisualElement class="button-group">
+        <ui:Button name="clear-button" text="Clear" />
+        <ui:Button name="save-button" text="Save" />
+    </ui:VisualElement>
+    <ui:Label text="Templates" class="header" />
     <ui:VisualElement class="button-group">
         <ui:Button name="copy-project-button" text="Copy to Project" />
         <ui:Button name="copy-editor-button" text="Copy to Editor" />

@@ -5,9 +5,9 @@
  * Tips from https://forum.unity3d.com/threads/c-script-template-how-to-make-custom-changes.273191/
  */
 
-using UnityEngine;
+using System.IO;
 using UnityEditor;
-using System.Globalization;
+using UnityEngine;
 
 namespace MyUnityTools.ScriptTemplates
 {
@@ -20,24 +20,26 @@ namespace MyUnityTools.ScriptTemplates
         public static void OnWillCreateAsset(string path)
         {
             path = path.Replace(".meta", "");
-            int index = path.LastIndexOf(".");
+            var index = path.LastIndexOf(".");
             if (index < 0)
                 return;
 
-            string file = path.Substring(index);
+            var file = path.Substring(index);
             if (file != ".cs")
                 return;
 
             index = Application.dataPath.LastIndexOf("Assets");
             path = Application.dataPath.Substring(0, index) + path;
-            if (!System.IO.File.Exists(path))
+            if (!File.Exists(path))
                 return;
 
-            string fileContent = System.IO.File.ReadAllText(path);
-            fileContent = fileContent.Replace("#AUTHOR#", $"{EditorPrefs.GetString(ScriptTemplatesEditor.AuthorNameKey)}{(EditorPrefs.HasKey(ScriptTemplatesEditor.AuthorEmailKey) ? $" [{EditorPrefs.GetString(ScriptTemplatesEditor.AuthorEmailKey)}]" : string.Empty)}");
-            fileContent = fileContent.Replace("#CREATIONDATE#", EditorPrefs.GetBool(ScriptTemplatesEditor.UseLocalDateKey, false) ? $"{System.DateTime.Now.ToString("d", CultureInfo.CurrentCulture)} ({CultureInfo.CurrentCulture.Name})" : System.DateTime.Now.ToString("yyyy-MM-dd"));
+            var keywordReplacer = new ScriptKeywordReplacer(ScriptTemplateSettings.FromEditorPrefs());
 
-            System.IO.File.WriteAllText(path, fileContent);
+            var fileContent = File.ReadAllText(path);
+
+            fileContent = keywordReplacer.ProcessScriptTemplate(fileContent, Path.GetFileNameWithoutExtension(path));
+
+            File.WriteAllText(path, fileContent);
             AssetDatabase.Refresh();
         }
     }

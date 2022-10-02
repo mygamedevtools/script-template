@@ -9,20 +9,20 @@ using UnityEngine.UIElements;
 
 namespace MyUnityTools.ScriptTemplates.UIToolkit
 {
-    public class Module : VisualElement
+    public class Module : BindableElement, INotifyValueChanged<bool>
     {
-        public new class UxmlFactory : UxmlFactory<Module, UxmlTraits> {}
+        public new class UxmlFactory : UxmlFactory<Module, UxmlTraits> { }
 
-        public new class UxmlTraits : VisualElement.UxmlTraits
+        public new class UxmlTraits : BindableElement.UxmlTraits
         {
             UxmlStringAttributeDescription _titleAttribute = new UxmlStringAttributeDescription
             {
                 name = "title",
                 defaultValue = "New Module"
             };
-            UxmlBoolAttributeDescription _enabledAttribute = new UxmlBoolAttributeDescription
+            UxmlBoolAttributeDescription _valueAttribute = new UxmlBoolAttributeDescription
             {
-                name = "enabled",
+                name = "value",
                 defaultValue = true
             };
 
@@ -40,7 +40,7 @@ namespace MyUnityTools.ScriptTemplates.UIToolkit
 
                 var module = (Module)element;
                 module.title = _titleAttribute.GetValueFromBag(bag, context);
-                module.enabled = _enabledAttribute.GetValueFromBag(bag, context);
+                module.SetValueWithoutNotify(_valueAttribute.GetValueFromBag(bag, context));
             }
         }
 
@@ -51,16 +51,29 @@ namespace MyUnityTools.ScriptTemplates.UIToolkit
             get => _title.text;
             set => _title.text = value;
         }
-        public bool enabled
+        public bool value
         {
-            get => _toggle.value;
-            set => _toggle.value = value;
+            get
+            {
+                return _value;
+            }
+            set
+            {
+                if (_value != value)
+                {
+                    using ChangeEvent<bool> changeEvent = ChangeEvent<bool>.GetPooled(_value, value);
+                    changeEvent.target = this;
+                    SetValueWithoutNotify(value);
+                    SendEvent(changeEvent);
+                }
+            }
         }
 
-        public readonly Toggle _toggle;
-
         readonly VisualElement _content;
+        readonly Toggle _toggle;
         readonly Label _title;
+
+        bool _value;
 
         public Module()
         {
@@ -79,6 +92,11 @@ namespace MyUnityTools.ScriptTemplates.UIToolkit
                 value = true
             };
             _toggle.AddToClassList("module-header__toggle");
+            _toggle.RegisterValueChangedCallback(evt =>
+            {
+                value = _toggle.value;
+                evt.StopPropagation();
+            });
             header.Add(_toggle);
 
             _title = new Label("New Module");
@@ -94,6 +112,12 @@ namespace MyUnityTools.ScriptTemplates.UIToolkit
             hierarchy.Add(_content);
 
             foldout.RegisterValueChangedCallback(changeEvent => _content.EnableInClassList("hidden", !changeEvent.newValue));
+        }
+
+        public void SetValueWithoutNotify(bool newValue)
+        {
+            _value = newValue;
+            _toggle.value = _value;
         }
     }
 }
