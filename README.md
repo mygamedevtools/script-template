@@ -27,7 +27,7 @@ Usage
 
 From `Assets/Script Templates Editor` you can open the **Script Templates Editor** Window.
 
-![Custom Script Template Editor](https://user-images.githubusercontent.com/9505905/190041726-dcd85558-00fa-49d3-b0cc-03a20da335bd.png)
+![Custom Script Template Editor](https://user-images.githubusercontent.com/9505905/193695307-3b607ab4-9c31-4dab-b96b-176ac57589c2.png)
 
 Here you can set your Author Name and Email to add to your script's signature header. Also, you can choose to use the **local date format**: _9/13/2022 (en-US)_, for example, or the standard ISO format: _2022-09-13_. You need to click `Save` to store this data into
 the [Editor Prefs](https://docs.unity3d.com/ScriptReference/EditorPrefs.html). You also have the option to clear the saved data.
