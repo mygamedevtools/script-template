@@ -1,8 +1,8 @@
 {
   "name": "com.myunitytools.script-template",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "displayName": "Script Templates",
-  "description": "This tool adds custom Script Templates to Unity that will serve as alternatives for the default \"C#Script\" that I personally always modify before writing my scripts.\nIn essence, it adds a signature header on every script with your name, email and creation date. \nAdditionally, it adds templates for others types of scripts rather than just Mono Behaviours.",
+  "description": "This tool adds custom Script Templates to Unity that will serve as alternatives for the default \"C#Script\" that I personally always modify before writing my scripts.\nIn essence, it allows customization of the script templates with dynamic data such as signature and namespace settings.\nAdditionally, it adds templates for others types of scripts rather than just Mono Behaviours.",
   "unity": "2019.4",
   "keywords": [
     "custom",

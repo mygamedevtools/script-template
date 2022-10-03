@@ -1,12 +1,6 @@
-/**
- * #SCRIPTNAME#.cs
- * Created by: #AUTHOR#
- * Created on: #CREATIONDATE#
- */
+#SIGNATURE#using UnityEngine;
 
-using UnityEngine;
-
-public class #SCRIPTNAME# : MonoBehaviour
+#NAMESPACE#public class #SCRIPTNAME# : MonoBehaviour
 {
 
 }

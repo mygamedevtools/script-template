@@ -1,9 +1,10 @@
 /**
- * CustomScriptTemplateEditor.cs
+ * ScriptTemplatesEditor.cs
  * Created by: João Borks [joao.borks@gmail.com]
  * Created on: 2019-07-13
  */
 
+using MyUnityTools.ScriptTemplates.UIToolkit;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -16,29 +17,7 @@ namespace MyUnityTools.ScriptTemplates
 {
     public class ScriptTemplatesEditor : EditorWindow
     {
-        /// <summary>
-        /// The name of the <see cref="authorName"/> string field saved on <see cref="EditorPrefs"/>
-        /// </summary>
-        public const string AuthorNameKey = "com.myunitytools.cst.authorName";
-        /// <summary>
-        /// The name of the <see cref="authorEmail"/> string field saved on <see cref="EditorPrefs"/>
-        /// </summary>
-        public const string AuthorEmailKey = "com.myunitytools.cst.authorEmail";
-        /// <summary>
-        /// Should the date be formatted in the current locale or in the default ISO format?
-        /// </summary>
-        public const string UseLocalDateKey = "com.myunitytools.cst.localdate";
-        /// <summary>
-        /// The name of the <see cref="localGUID"/> string field saved on <see cref="EditorPrefs"/>
-        /// </summary>
-        public const string LocalGUIDKey = "com.myunitytools.cst.localguid";
-        /// <summary>
-        /// Package path for accessing script templates and visual elements
-        /// </summary>
         public const string PackageRootPath = "Packages/com.myunitytools.script-template/";
-        /// <summary>
-        /// Project path for storing script templates
-        /// </summary>
         public const string LocalTemplatesPath = "Assets/ScriptTemplates/";
 
         /// <summary>
@@ -47,66 +26,128 @@ namespace MyUnityTools.ScriptTemplates
         public static readonly string EditorTemplatesPath = EditorApplication.applicationPath.Replace("Unity.exe", "") + "/Data/Resources/ScriptTemplates/";
 
         const string _editorRestartMesssage = "Copying Script Templates will requre Editor restart in order to apply the changes. Do you want to restart now?";
+        const string _previewTemplate =
+            "<color=#608B4E>#SIGNATURE#</color><color=#569cd6>using</color> UnityEngine;\n" +
+            "\n" +
+            "#NAMESPACE#<color=#569cd6>public class</color> <color=#4ec9b0>#SCRIPTNAME#</color> : <color=#4ec9b0>MonoBehaviour</color>\n" +
+            "{\n" +
+            "    <color=#569cd6>public void</color> <color=#dcdcaa>Start</color>()\n" +
+            "    {\n" +
+            "    }\n" +
+            "}";
+
+        ScriptTemplateSettings _cachedTemplateSettings;
+        ScriptTemplateSettings _previewTemplateSettings;
+        ScriptKeywordReplacer _keywordReplacer;
 
         [MenuItem("Assets/Script Templates Editor", false, 800)]
-        public static void ShowWindow() => GetWindow<ScriptTemplatesEditor>("Script Templates").minSize = new Vector2(300, 250);
+        public static void ShowWindow() => GetWindow<ScriptTemplatesEditor>("Script Templates").minSize = new Vector2(400, 650);
 
         void OnEnable()
         {
             var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(PackageRootPath + "UIToolkit/ScriptTemplateWindow.uxml");
             rootVisualElement.Add(visualTree.CloneTree());
-            var styles = AssetDatabase.LoadAssetAtPath<StyleSheet>(PackageRootPath + "UIToolkit/Styles/ScriptTemplateStyles.uss");
-            rootVisualElement.styleSheets.Add(styles);
 
-            DrawInfoView();
-            DrawTemplateView();
+            _cachedTemplateSettings = ScriptTemplateSettings.FromEditorPrefs();
+            _previewTemplateSettings = new ScriptTemplateSettings()
+            {
+                Signature = _cachedTemplateSettings.Signature,
+                Namespace = _cachedTemplateSettings.Namespace
+            };
+            _keywordReplacer = new ScriptKeywordReplacer(_previewTemplateSettings);
+
+            BindSettingsView();
+            BindTemplateView();
         }
 
-        void DrawInfoView()
+        void BindSettingsView()
         {
+            var previewLabel = rootVisualElement.Q<Label>("preview-template");
             var saveButton = rootVisualElement.Q<Button>("save-button");
-
-            var authorField = rootVisualElement.Q<TextField>("author");
-            authorField.SetValueWithoutNotify(EditorPrefs.GetString(AuthorNameKey, string.Empty));
-            authorField.RegisterValueChangedCallback(e => saveButton.SetEnabled(!isAuthorUpdated(e.newValue) && !string.IsNullOrEmpty(authorField.value)));
-
-            var emailField = rootVisualElement.Q<TextField>("email");
-            emailField.SetValueWithoutNotify(EditorPrefs.GetString(AuthorEmailKey, string.Empty));
-            emailField.RegisterValueChangedCallback(e => saveButton.SetEnabled(!isEmailUpdated(e.newValue) && !string.IsNullOrEmpty(authorField.value)));
-
-            var localDateToggle = rootVisualElement.Q<Toggle>("localdate");
-            localDateToggle.SetValueWithoutNotify(EditorPrefs.GetBool(UseLocalDateKey, false));
-            localDateToggle.RegisterValueChangedCallback(e => saveButton.SetEnabled(!isLocalDateUpdated(e.newValue)));
-
             var clearButton = rootVisualElement.Q<Button>("clear-button");
-            clearButton.SetEnabled(EditorPrefs.HasKey(AuthorNameKey) || EditorPrefs.HasKey(AuthorEmailKey));
+
+            var signatureModule = rootVisualElement.Q<Module>("signature-module");
+            signatureModule.SetValueWithoutNotify(_previewTemplateSettings.Signature.Enabled);
+
+            var authorField = signatureModule.Q<TextField>("author");
+            authorField.SetValueWithoutNotify(_previewTemplateSettings.Signature.AuthorName);
+
+            var emailField = signatureModule.Q<TextField>("email");
+            emailField.SetValueWithoutNotify(_previewTemplateSettings.Signature.AuthorEmail);
+
+            var localDateToggle = signatureModule.Q<Toggle>("localdate");
+            localDateToggle.SetValueWithoutNotify(_previewTemplateSettings.Signature.UseLocalDateFormat);
+
+            var namespaceModule = rootVisualElement.Q<Module>("namespace-module");
+            namespaceModule.SetValueWithoutNotify(_previewTemplateSettings.Namespace.Enabled);
+
+            var assembly = namespaceModule.Q<Toggle>("assembly");
+            assembly.SetValueWithoutNotify(_previewTemplateSettings.Namespace.UseAssemblyDefinition);
+
+            var defaultNamespace = namespaceModule.Q<TextField>("default");
+            defaultNamespace.SetValueWithoutNotify(_previewTemplateSettings.Namespace.DefaultNamespace);
+
+            var indentType = namespaceModule.Q<EnumField>("indent-type");
+            indentType.SetValueWithoutNotify(_previewTemplateSettings.Namespace.IndentPattern);
+
+            var indentMult = namespaceModule.Q<SliderInt>("indent-mult");
+            indentMult.SetValueWithoutNotify(_previewTemplateSettings.Namespace.IndentMultiplier);
+
+            clearButton.SetEnabled(!_cachedTemplateSettings.IsEmpty());
             clearButton.clicked += () =>
             {
-                EditorPrefs.DeleteKey(AuthorNameKey);
-                EditorPrefs.DeleteKey(AuthorEmailKey);
-                EditorPrefs.DeleteKey(UseLocalDateKey);
-                saveButton.SetEnabled(!string.IsNullOrEmpty(authorField.value));
+                _cachedTemplateSettings.Signature = new SignatureSettings();
+                _cachedTemplateSettings.DeleteEditorPrefs();
+                saveButton.SetEnabled(_cachedTemplateSettings != _previewTemplateSettings);
                 clearButton.SetEnabled(false);
             };
+
+            signatureModule.RegisterValueChangedCallback(e => updatePreview());
+            authorField.RegisterValueChangedCallback(e => updatePreview());
+            emailField.RegisterValueChangedCallback(e => updatePreview());
+            localDateToggle.RegisterValueChangedCallback(e => updatePreview());
+
+            namespaceModule.RegisterValueChangedCallback(e => updatePreview());
+            assembly.RegisterValueChangedCallback(e => updatePreview());
+            defaultNamespace.RegisterValueChangedCallback(e => updatePreview());
+            indentType.RegisterValueChangedCallback(e => updatePreview());
+            indentMult.RegisterValueChangedCallback(e => updatePreview());
 
             saveButton.SetEnabled(false);
             saveButton.clicked += () =>
             {
-                EditorPrefs.SetString(AuthorNameKey, authorField.value);
-                EditorPrefs.SetString(AuthorEmailKey, emailField.value);
-                EditorPrefs.SetBool(UseLocalDateKey, localDateToggle.value);
+                _cachedTemplateSettings.Signature = _previewTemplateSettings.Signature;
+                _cachedTemplateSettings.Namespace = _previewTemplateSettings.Namespace;
+                _previewTemplateSettings.SaveToEditorPrefs();
                 saveButton.SetEnabled(false);
-                clearButton.SetEnabled(true);
+                clearButton.SetEnabled(!_cachedTemplateSettings.IsEmpty());
             };
 
-            bool isAuthorUpdated(string author) => author == EditorPrefs.GetString(AuthorNameKey, string.Empty);
+            updatePreview();
 
-            bool isEmailUpdated(string email) => email == EditorPrefs.GetString(AuthorEmailKey, string.Empty);
-
-            bool isLocalDateUpdated(bool value) => value == EditorPrefs.GetBool(UseLocalDateKey, false);
+            void updatePreview()
+            {
+                _previewTemplateSettings.Signature = new SignatureSettings
+                {
+                    Enabled = signatureModule.value,
+                    AuthorName = authorField.value,
+                    AuthorEmail = emailField.value,
+                    UseLocalDateFormat = localDateToggle.value
+                };
+                _previewTemplateSettings.Namespace = new NamespaceSettings
+                {
+                    Enabled = namespaceModule.value,
+                    UseAssemblyDefinition = assembly.value,
+                    DefaultNamespace = defaultNamespace.value,
+                    IndentPattern = (IndentPattern)indentType.value,
+                    IndentMultiplier = indentMult.value
+                };
+                previewLabel.text = _keywordReplacer.ProcessScriptTemplate(_previewTemplate, "Assets/Scripts/ExampleScript.cs").Replace("namespace", "<color=#569cd6>namespace</color>").Replace(" ", "<color=#144852>·</color>").Replace("\t", "<color=#144852>→   </color>");
+                saveButton.SetEnabled(_cachedTemplateSettings != _previewTemplateSettings && _previewTemplateSettings.IsValid());
+            }
         }
 
-        void DrawTemplateView()
+        void BindTemplateView()
         {
             var templates = GetPackageScriptTemplates();
             var listView = rootVisualElement.Q<ListView>("template-list");
@@ -129,9 +170,9 @@ namespace MyUnityTools.ScriptTemplates
 #endif
             listView.selectionType = SelectionType.Single;
 #if UNITY_2021_2_OR_NEWER
-            listView.onSelectionChange += selection => Selection.activeObject = (Object)selection.FirstOrDefault();
+            listView.onSelectionChange += selection => Selection.activeObject = (UnityEngine.Object)selection.FirstOrDefault();
 #else
-            listView.onSelectionChanged += selection => Selection.activeObject = (Object)selection.FirstOrDefault();
+            listView.onSelectionChanged += selection => Selection.activeObject = (UnityEngine.Object)selection.FirstOrDefault();
 #endif
 
             var projectButton = rootVisualElement.Q<Button>("copy-project-button");
