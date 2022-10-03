@@ -1,5 +1,4 @@
-#SIGNATURE#
-using UnityEngine;
+#SIGNATURE#using UnityEngine;
 
 #NAMESPACE#public class #SCRIPTNAME# : ScriptableObject
 {

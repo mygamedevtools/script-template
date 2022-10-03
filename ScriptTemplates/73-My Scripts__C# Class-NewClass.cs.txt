@@ -1,5 +1,4 @@
-#SIGNATURE#
-#NAMESPACE#public class #SCRIPTNAME#
+#SIGNATURE##NAMESPACE#public class #SCRIPTNAME#
 {
 
 }

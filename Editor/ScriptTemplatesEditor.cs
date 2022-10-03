@@ -27,8 +27,7 @@ namespace MyUnityTools.ScriptTemplates
 
         const string _editorRestartMesssage = "Copying Script Templates will requre Editor restart in order to apply the changes. Do you want to restart now?";
         const string _previewTemplate =
-            "<color=#608B4E>#SIGNATURE#</color>\n" +
-            "<color=#569cd6>using</color> UnityEngine;\n" +
+            "<color=#608B4E>#SIGNATURE#</color><color=#569cd6>using</color> UnityEngine;\n" +
             "\n" +
             "#NAMESPACE#<color=#569cd6>public class</color> <color=#4ec9b0>#SCRIPTNAME#</color> : <color=#4ec9b0>MonoBehaviour</color>\n" +
             "{\n" +

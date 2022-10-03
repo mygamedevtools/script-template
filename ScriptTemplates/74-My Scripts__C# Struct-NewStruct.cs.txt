@@ -1,5 +1,4 @@
-#SIGNATURE#
-#NAMESPACE#public struct #SCRIPTNAME#
+#SIGNATURE##NAMESPACE#public struct #SCRIPTNAME#
 {
 
 }

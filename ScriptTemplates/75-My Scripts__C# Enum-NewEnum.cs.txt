@@ -1,5 +1,4 @@
-#SIGNATURE#
-#NAMESPACE#public enum #SCRIPTNAME#
+#SIGNATURE##NAMESPACE#public enum #SCRIPTNAME#
 {
 
 }

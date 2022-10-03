@@ -25,7 +25,7 @@ namespace MyUnityTools.ScriptTemplates
             " * " + _scriptNameKeyword + ".cs\n" +
             " * Created by: " + _authorKeyword + "\n" +
             " * Created on: " + _dateKeyword + "\n" +
-            " */\n";
+            " */\n\n";
 
         public string AuthorString => $"{_templateSettings.Signature.AuthorName}{(!string.IsNullOrWhiteSpace(_templateSettings.Signature.AuthorEmail) ? $" [{_templateSettings.Signature.AuthorEmail}]" : string.Empty)}";
         public string DateString => _templateSettings.Signature.UseLocalDateFormat ? $"{DateTime.Now.ToString("d", CultureInfo.CurrentCulture)} ({CultureInfo.CurrentCulture.Name})" : DateTime.Now.ToString("yyyy-MM-dd");
