@@ -1,6 +1,6 @@
-![License](https://img.shields.io/github/license/myunitytools/script-template)
-![Release](https://img.shields.io/github/v/release/myunitytools/script-template?sort=semver)
-![Last Commit](https://img.shields.io/github/last-commit/myunitytools/script-template)
+![License](https://img.shields.io/github/license/mygamedevtools/script-template)
+![Release](https://img.shields.io/github/v/release/mygamedevtools/script-template?sort=semver)
+![Last Commit](https://img.shields.io/github/last-commit/mygamedevtools/script-template)
 
 My Unity Tools - Script Template
 ===
@@ -16,7 +16,7 @@ Installation
 ---
 
 #### [Installing from a git URL](https://docs.unity3d.com/Manual/upm-ui-giturl.html) _(requires [Git](https://git-scm.com/) installed and added to the PATH)_
-You can open the Package Manager and then click on the `+` button on the top left corner. From there select `Add package from git URL...`, type `https://github.com/myunitytools/script-template.git` and click `Add`. The package will be imported by the Package Manager.
+You can open the Package Manager and then click on the `+` button on the top left corner. From there select `Add package from git URL...`, type `https://github.com/mygamedevtools/script-template.git` and click `Add`. The package will be imported by the Package Manager.
 
 :link: [Unity Official Documentation](https://docs.unity3d.com/Manual/upm-git.html)
 
@@ -107,4 +107,4 @@ I'd very much like to be able to [manage my Script Templates over the Unity Hub]
 
 ---
 
-Don't hesitate to create [issues](https://github.com/myunitytools/script-template/issues) for suggestions and bugs. Have fun!
+Don't hesitate to create [issues](https://github.com/mygamedevtools/script-template/issues) for suggestions and bugs. Have fun!
