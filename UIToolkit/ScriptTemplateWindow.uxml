@@ -13,6 +13,14 @@
             <ui:TextField name="email" label="Email (optional)" />
         </ui:VisualElement>
     </MyUnityTools.ScriptTemplates.UIToolkit.Module>
+    <MyUnityTools.ScriptTemplates.UIToolkit.Module name="namespace-module" title="Namespace">
+        <ui:VisualElement name="namespace-group">
+            <ui:Toggle label="Use Assembly Definition" name="assembly" />
+            <ui:TextField picking-mode="Ignore" label="Default Namespace" text="Example.Namespace" name="default" />
+            <uie:EnumField label="Indent Pattern" name="indent-type" type="MyUnityTools.ScriptTemplates.IndentPattern, MyUnityTools.ScriptTemplates" />
+            <ui:SliderInt picking-mode="Ignore" label="Indent Multiplier" high-value="8" low-value="1" name="indent-mult" show-input-field="true" />
+        </ui:VisualElement>
+    </MyUnityTools.ScriptTemplates.UIToolkit.Module>
     <ui:VisualElement class="button-group">
         <ui:Button name="clear-button" text="Clear" />
         <ui:Button name="save-button" text="Save" />

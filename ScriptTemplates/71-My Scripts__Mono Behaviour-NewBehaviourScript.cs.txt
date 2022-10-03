@@ -1,6 +1,7 @@
-#SIGNATURE#using UnityEngine;
+#SIGNATURE#
+using UnityEngine;
 
-public class #SCRIPTNAME# : MonoBehaviour
+#NAMESPACE#public class #SCRIPTNAME# : MonoBehaviour
 {
 
 }

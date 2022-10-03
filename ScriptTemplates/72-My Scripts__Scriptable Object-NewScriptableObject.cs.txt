@@ -1,6 +1,7 @@
-#SIGNATURE#using UnityEngine;
+#SIGNATURE#
+using UnityEngine;
 
-public class #SCRIPTNAME# : ScriptableObject
+#NAMESPACE#public class #SCRIPTNAME# : ScriptableObject
 {
 
 }

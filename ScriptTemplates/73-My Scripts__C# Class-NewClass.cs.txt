@@ -1,6 +1,5 @@
-#SIGNATURE#using UnityEngine;
-
-public class #SCRIPTNAME#
+#SIGNATURE#
+#NAMESPACE#public class #SCRIPTNAME#
 {
 
 }

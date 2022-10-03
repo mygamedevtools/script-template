@@ -20,6 +20,7 @@ namespace MyUnityTools.ScriptTemplates
         public static void OnWillCreateAsset(string path)
         {
             path = path.Replace(".meta", "");
+            var assetPath = path;
             var index = path.LastIndexOf(".");
             if (index < 0)
                 return;
@@ -37,7 +38,7 @@ namespace MyUnityTools.ScriptTemplates
 
             var fileContent = File.ReadAllText(path);
 
-            fileContent = keywordReplacer.ProcessScriptTemplate(fileContent, Path.GetFileNameWithoutExtension(path));
+            fileContent = keywordReplacer.ProcessScriptTemplate(fileContent, assetPath);
 
             File.WriteAllText(path, fileContent);
             AssetDatabase.Refresh();

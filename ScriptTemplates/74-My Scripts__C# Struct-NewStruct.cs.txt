@@ -1,6 +1,5 @@
-#SIGNATURE#using UnityEngine;
-
-public struct #SCRIPTNAME#
+#SIGNATURE#
+#NAMESPACE#public struct #SCRIPTNAME#
 {
 
 }

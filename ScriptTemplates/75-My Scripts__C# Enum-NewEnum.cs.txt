@@ -1,6 +1,5 @@
-#SIGNATURE#using UnityEngine;
-
-public enum #SCRIPTNAME#
+#SIGNATURE#
+#NAMESPACE#public enum #SCRIPTNAME#
 {
 
 }
