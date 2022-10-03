@@ -3,8 +3,11 @@ Change Log
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.1.0] - 2021-10-03
-- Changed: Updated organization name to comply with [Unity Package Guidelines](https://unity.com/legal/terms-of-service/software/package-guidelines);
+## [3.2.0] - 2022-10-03
+- Fixed: Updated assembly definition and namespaces names to reflect the organization name changes.
+
+## [3.1.0] - 2022-10-03
+- Changed: Updated organization name to comply with [Unity Package Guidelines](https://unity.com/legal/terms-of-service/software/package-guidelines).
 
 ## [3.0.0] - 2022-10-03
 - Added: Namespace settings module.
@@ -50,6 +53,7 @@ All notable changes to this project will be documented in this file. This projec
 ## [1.0.0] - 2019-07-27
 - Initial Asset Store release.
 
+[3.2.0]: https://github.com/mygamedevtools/script-template/compare/3.1.0...3.2.0
 [3.1.0]: https://github.com/mygamedevtools/script-template/compare/3.0.0...3.1.0
 [3.0.0]: https://github.com/mygamedevtools/script-template/compare/2.2.0...3.0.0
 [2.2.0]: https://github.com/mygamedevtools/script-template/compare/2.1.0...2.2.0
