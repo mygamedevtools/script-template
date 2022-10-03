@@ -7,7 +7,7 @@
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 
-namespace MyUnityTools.ScriptTemplates.UIToolkit
+namespace MyGameDevTools.ScriptTemplates.UIToolkit
 {
     public class Module : BindableElement, INotifyValueChanged<bool>
     {

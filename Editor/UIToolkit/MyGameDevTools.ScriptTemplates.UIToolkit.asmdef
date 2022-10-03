@@ -1,9 +1,7 @@
 {
-    "name": "MyUnityTools.ScriptTemplates",
+    "name": "MyGameDevTools.ScriptTemplates.UIToolkit",
     "rootNamespace": "",
-    "references": [
-        "GUID:2fa312fb52fb6b547b332c9fb4cb6d79"
-    ],
+    "references": [],
     "includePlatforms": [
         "Editor"
     ],

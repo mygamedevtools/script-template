@@ -4,7 +4,7 @@
  * Created on: 2021-10-02
  */
 
-namespace MyUnityTools.ScriptTemplates
+namespace MyGameDevTools.ScriptTemplates
 {
     public enum IndentPattern
     {

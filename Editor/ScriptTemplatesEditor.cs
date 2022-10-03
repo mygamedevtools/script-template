@@ -4,7 +4,7 @@
  * Created on: 2019-07-13
  */
 
-using MyUnityTools.ScriptTemplates.UIToolkit;
+using MyGameDevTools.ScriptTemplates.UIToolkit;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -13,11 +13,11 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace MyUnityTools.ScriptTemplates
+namespace MyGameDevTools.ScriptTemplates
 {
     public class ScriptTemplatesEditor : EditorWindow
     {
-        public const string PackageRootPath = "Packages/com.myunitytools.script-template/";
+        public const string PackageRootPath = "Packages/com.mygamedevtools.script-template/";
         public const string LocalTemplatesPath = "Assets/ScriptTemplates/";
 
         /// <summary>
