@@ -10,7 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using UnityEditor.Compilation;
 
-namespace MyUnityTools.ScriptTemplates
+namespace MyGameDevTools.ScriptTemplates
 {
     public class ScriptKeywordReplacer
     {

@@ -6,7 +6,7 @@
 
 using System;
 
-namespace MyUnityTools.ScriptTemplates
+namespace MyGameDevTools.ScriptTemplates
 {
     [Serializable]
     public struct NamespaceSettings
