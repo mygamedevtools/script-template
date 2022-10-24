@@ -3,6 +3,9 @@ Change Log
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.2.1] - 2022-10-24
+- Added: OpenUPM documentation.
+
 ## [3.2.0] - 2022-10-03
 - Fixed: Updated assembly definition and namespaces names to reflect the organization name changes.
 
@@ -53,6 +56,7 @@ All notable changes to this project will be documented in this file. This projec
 ## [1.0.0] - 2019-07-27
 - Initial Asset Store release.
 
+[3.2.1]: https://github.com/mygamedevtools/script-template/compare/3.2.0...3.2.1
 [3.2.0]: https://github.com/mygamedevtools/script-template/compare/3.1.0...3.2.0
 [3.1.0]: https://github.com/mygamedevtools/script-template/compare/3.0.0...3.1.0
 [3.0.0]: https://github.com/mygamedevtools/script-template/compare/2.2.0...3.0.0
