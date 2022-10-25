@@ -1,3 +1,10 @@
+# [3.3.0](https://github.com/mygamedevtools/script-template/compare/3.2.1...3.3.0) (2022-10-25)
+
+
+### Features
+
+* Add CI configuration ([079c51e](https://github.com/mygamedevtools/script-template/commit/079c51e92b5790ac79f2687381bd0daffed02582))
+
 ## [3.2.1] - 2022-10-24
 - Added: OpenUPM documentation.
 
