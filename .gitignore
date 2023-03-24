@@ -1,10 +1,16 @@
+# This .gitignore file should be placed at the root of your Unity project directory
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
 [Bb]uild/
 [Bb]uilds/
 [Ll]ogs/
-[Uu]serSettings/
+[Uu]ser[Ss]ettings/
+[Cc]ode[Cc]overage/
+
+# MemoryCaptures can get excessive in size.
+# They also could contain extremely sensitive data
+[Mm]emoryCaptures/
 
 # Never ignore Asset meta data
 ![Aa]ssets/**/*.meta
@@ -13,13 +19,14 @@
 [Aa]ssets/AssetStoreTools*
 
 # Visual Studio cache directory
-/.vs/
-
-# Rider directory
-/.idea/
+.vs/
+.vsconfig
 
 # VS Code
-/.vscode/
+.vscode/
+
+# Rider
+.idea/
 
 # Gradle cache directory
 .gradle/
@@ -66,6 +73,9 @@ Thumbs.db
 # Crashlytics generated file
 crashlytics-build.properties
 
-# Other
-[Aa]ssets/Amazing Assets/Curved World/Editor/Installer/
-[Aa]ssets/Amazing Assets/Curved World/Shaders/Packages/
+# Packed Addressables
+[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
+
+# Temporary auto-generated Android Assets
+[Aa]ssets/[Ss]treamingAssets/aa.meta
+[Aa]ssets/[Ss]treamingAssets/aa/*
