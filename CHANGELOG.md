@@ -1,3 +1,10 @@
+# [3.4.0](https://github.com/mygamedevtools/script-template/compare/3.3.0...3.4.0) (2023-03-25)
+
+
+### Features
+
+* add entities script templates ([2f34568](https://github.com/mygamedevtools/script-template/commit/2f34568c77c0afb266129b98251f75256b81e5d4))
+
 # [3.3.0](https://github.com/mygamedevtools/script-template/compare/3.2.1...3.3.0) (2022-10-25)
 
 
