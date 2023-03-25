@@ -4,10 +4,10 @@
     ["@semantic-release/commit-analyzer", { "preset": "angular" }],                          
     "@semantic-release/release-notes-generator",                                             
     ["@semantic-release/changelog", { "preset": "angular" }],                                
-    ["@semantic-release/npm", { "npmPublish": false }],                      
+    ["@semantic-release/npm", { "npmPublish": false, "pkgRoot": "Packages/mygamedevtools-script-template" }],                      
     ["@semantic-release/git", {                                                              
-      "assets": ["package.json", "CHANGELOG.md"],                                            
-      "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"  
+      "assets": ["Packages/mygamedevtools-script-template/package.json", "CHANGELOG.md"],                                            
+      "message": "ci(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"  
     }],                                                                                      
     "@semantic-release/github"                                                               
   ]                                                                                          
