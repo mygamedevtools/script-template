@@ -1,12 +1,34 @@
-![License](https://img.shields.io/github/license/mygamedevtools/script-template)
-[![openupm](https://img.shields.io/npm/v/com.mygamedevtools.script-template?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.mygamedevtools.script-template/)
-![Release](https://img.shields.io/github/v/release/mygamedevtools/script-template?sort=semver)
-![Last Commit](https://img.shields.io/github/last-commit/mygamedevtools/script-template)
+<h1 align=center>
+Script Template
+</h1>
 
-My Unity Tools - Script Template
-===
+<p align=center>  
+  <a href="LICENSE">
+    <img src="https://img.shields.io/github/license/mygamedevtools/script-template" />
+  </a>
+  <a href="https://github.com/mygamedevtools/script-template/actions/workflows/release.yml">
+    <img src="https://github.com/mygamedevtools/script-template/actions/workflows/release.yml/badge.svg" />
+  </a>
+  <a href="https://github.com/mygamedevtools/script-template/commits/">
+    <img src="https://img.shields.io/github/last-commit/mygamedevtools/script-template" />
+  </a>
+</p>
 
+<p align=center>
+  <a href="https://openupm.com/packages/com.mygamedevtools.script-template/">
+    <img src="https://img.shields.io/npm/v/com.mygamedevtools.script-template?label=openupm&registry_uri=https://package.openupm.com" />
+  </a>
+  <a href="https://github.com/mygamedevtools/script-template/releases/latest">
+    <img src="https://img.shields.io/github/v/release/mygamedevtools/script-template?sort=semver" />
+  </a>
+  <a href="https://github.com/semantic-release/semantic-release">
+    <img src="https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release" />
+  </a>
+</p>
+
+<p align=center><i>
 A simple tool to add and manage more script templates.
+</i></p>
 
 What's this about?
 ---
