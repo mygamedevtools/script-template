@@ -169,7 +169,9 @@ namespace MyGameDevTools.ScriptTemplates
             listView.itemHeight = 20;
 #endif
             listView.selectionType = SelectionType.Single;
-#if UNITY_2021_2_OR_NEWER
+#if UNITY_2022_2_OR_NEWER
+            listView.selectionChanged += selection => Selection.activeObject = (UnityEngine.Object)selection.FirstOrDefault();
+#elif UNITY_2021_2_OR_NEWER
             listView.onSelectionChange += selection => Selection.activeObject = (UnityEngine.Object)selection.FirstOrDefault();
 #else
             listView.onSelectionChanged += selection => Selection.activeObject = (UnityEngine.Object)selection.FirstOrDefault();
