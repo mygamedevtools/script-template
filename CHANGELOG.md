@@ -1,3 +1,10 @@
+## [3.4.1](https://github.com/mygamedevtools/script-template/compare/3.4.0...3.4.1) (2023-08-19)
+
+
+### Bug Fixes
+
+* update indentation replacements with tabs or spaces ([#12](https://github.com/mygamedevtools/script-template/issues/12)) ([05f5ce8](https://github.com/mygamedevtools/script-template/commit/05f5ce891ef146ab3f3baf1c580ad0a13c3e6f96))
+
 # [3.4.0](https://github.com/mygamedevtools/script-template/compare/3.3.0...3.4.0) (2023-03-25)
 
 
