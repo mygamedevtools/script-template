@@ -61,7 +61,7 @@ Usage
 
 From `Assets/Script Templates Editor` you can open the **Script Templates Editor** Window.
 
-![Custom Script Template Editor](https://user-images.githubusercontent.com/9505905/193695307-3b607ab4-9c31-4dab-b96b-176ac57589c2.png)
+![Custom Script Template Editor](https://github.com/mygamedevtools/script-template/assets/9505905/04d70654-95b9-4ab2-83f2-33e23a925631)
 
 Here you can preview in realtime what your script will look like, customize the values and copy the templates. 
 
