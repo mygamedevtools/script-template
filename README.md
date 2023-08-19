@@ -92,21 +92,50 @@ For that to work, you need to have a template such as:
 ```
 #NAMESPACE#public class #SCRIPTNAME# : MonoBehaviour
 {
-    public void Start()
-    {
-
-    }
+# #public void Start()
+# #{
+# ## #
+# #}
 }
 ```
 
 Then, if enabled, the namespace will be replaced according to the values you set.
 If you enable `Use Assembly Definition`, make sure the script is in the correct location to be linked to an assembly definition, or the `Default Namespace` will be applied.
 Otherwise, if you decide to just use the `Default Namespace`, then it will be applied to all scripts.
-Additionally, you can choose whether the auto indent use spaces or tabs and their amounts.
+
+#### Indentation
+
+The indentation whitespaces must be marked with the `# #` keyword, one for each indent level, so they can be converted to tabs or spaces and by how much. So, using the previous example:
+
+```
+#NAMESPACE#public class #SCRIPTNAME# : MonoBehaviour
+{
+# #public void Start()
+# #{
+# ## #
+# #}
+}
+```
+
+By selecting **4 spaces** as the indentation settings, the final created script would be:
+
+```cs
+namespace MyNamespace
+{
+    public class MyClass : MonoBehaviour
+    {
+        public void Start()
+        {
+
+        }
+    }
+}
+```
 
 Finally, you should `Save` your changes once you're satisfied with your settings, to make sure they will be used whenever creating a new script.
 You also have the option to `Clear` those settings at any time, if you wish.
 This data is saved to the [Editor Prefs](https://docs.unity3d.com/ScriptReference/EditorPrefs.html) cache.
+
 
 ### Templates
 
