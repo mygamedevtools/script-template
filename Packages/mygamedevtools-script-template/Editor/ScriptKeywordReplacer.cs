@@ -15,6 +15,7 @@ namespace MyGameDevTools.ScriptTemplates
     public class ScriptKeywordReplacer
     {
         const string _scriptNameKeyword = "#SCRIPTNAME#";
+        const string _whitespaceKeyword = "# #";
         const string _namespaceKeyword = "#NAMESPACE#";
         const string _signatureKeyword = "#SIGNATURE#";
         const string _authorKeyword = "#AUTHOR#";
@@ -56,7 +57,7 @@ namespace MyGameDevTools.ScriptTemplates
                 if (regex.IsMatch(scriptContent))
                 {
                     var match = regex.Match(scriptContent);
-                    var indentString = GetIndentReplacement();
+                    var indentString = "\n" + GetIndentReplacement();
                     var indentedMatch = match.Value.Replace("\n", indentString);
                     scriptContent = scriptContent
                         .Replace(match.Value, indentedMatch)
@@ -71,16 +72,17 @@ namespace MyGameDevTools.ScriptTemplates
             var stringBuilder = new StringBuilder(scriptContent);
             stringBuilder
                 .Replace(_signatureKeyword, _templateSettings.Signature.Enabled ? _signatureTemplate.Replace(_authorKeyword, AuthorString).Replace(_dateKeyword, DateString) : string.Empty)
-                .Replace(_scriptNameKeyword, System.IO.Path.GetFileNameWithoutExtension(path));
+                .Replace(_scriptNameKeyword, System.IO.Path.GetFileNameWithoutExtension(path))
+                .Replace(_whitespaceKeyword, GetIndentReplacement());
             return Regex.Replace(stringBuilder.ToString(), @"\r\n|\n\r|\n|\r", Environment.NewLine);
         }
 
         string GetIndentReplacement()
         {
-            string indentValue = _templateSettings.Namespace.IndentPattern == IndentPattern.Spaces ? " " : "\t";
-            var stringBuilder = new StringBuilder("\n");
+            string indentValue = _templateSettings.Indentation.IndentPattern == IndentPattern.Spaces ? " " : "\t";
+            var stringBuilder = new StringBuilder();
 
-            for (int i = 0; i < _templateSettings.Namespace.IndentMultiplier; i++)
+            for (int i = 0; i < _templateSettings.Indentation.IndentMultiplier; i++)
                 stringBuilder.Append(indentValue);
             return stringBuilder.ToString();
         }

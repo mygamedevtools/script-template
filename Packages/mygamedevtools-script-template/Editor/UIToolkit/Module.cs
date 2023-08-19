@@ -20,6 +20,11 @@ namespace MyGameDevTools.ScriptTemplates.UIToolkit
                 name = "title",
                 defaultValue = "New Module"
             };
+            UxmlBoolAttributeDescription _enableableAttribute = new UxmlBoolAttributeDescription
+            {
+                name = "enableable",
+                defaultValue = true
+            };
             UxmlBoolAttributeDescription _valueAttribute = new UxmlBoolAttributeDescription
             {
                 name = "value",
@@ -40,6 +45,7 @@ namespace MyGameDevTools.ScriptTemplates.UIToolkit
 
                 var module = (Module)element;
                 module.title = _titleAttribute.GetValueFromBag(bag, context);
+                module.enableable = _enableableAttribute.GetValueFromBag(bag, context);
                 module.SetValueWithoutNotify(_valueAttribute.GetValueFromBag(bag, context));
             }
         }
@@ -50,6 +56,11 @@ namespace MyGameDevTools.ScriptTemplates.UIToolkit
         {
             get => _title.text;
             set => _title.text = value;
+        }
+        public bool enableable
+        {
+            get => _toggle.visible;
+            set => _toggle.visible = value;
         }
         public bool value
         {

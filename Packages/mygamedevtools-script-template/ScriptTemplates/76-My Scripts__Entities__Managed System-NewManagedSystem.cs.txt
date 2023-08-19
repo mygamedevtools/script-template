@@ -2,8 +2,8 @@
 
 #NAMESPACE#public partial class #SCRIPTNAME# : SystemBase
 {
-    protected override void OnUpdate()
-    {
-        
-    }
+# #protected override void OnUpdate()
+# #{
+# ## #
+# #}
 }

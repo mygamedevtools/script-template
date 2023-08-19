@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <Style src="project://database/Packages/com.MyGameDevTools.script-template/UIToolkit/Styles.uss?fileID=7433441132597879392&amp;guid=f4c42f998c91eb24e88b3e8659ad04ca&amp;type=3#Styles" />
+    <Style src="project://database/Packages/com.mygamedevtools.script-template/UIToolkit/Styles.uss?fileID=7433441132597879392&amp;guid=f4c42f998c91eb24e88b3e8659ad04ca&amp;type=3#Styles" />
     <ui:VisualElement name="preview-group">
         <ui:VisualElement class="code-block">
             <ui:Label text="#TEMPLATE#" name="preview-template" class="code-block-text" />
@@ -17,6 +17,10 @@
         <ui:VisualElement name="namespace-group">
             <ui:Toggle label="Use Assembly Definition" name="assembly" />
             <ui:TextField picking-mode="Ignore" label="Default Namespace" text="Example.Namespace" name="default" />
+        </ui:VisualElement>
+    </MyGameDevTools.ScriptTemplates.UIToolkit.Module>
+    <MyGameDevTools.ScriptTemplates.UIToolkit.Module name="indentation-module" title="Indentation" enableable="false">
+        <ui:VisualElement name="namespace-group">
             <uie:EnumField label="Indent Pattern" name="indent-type" type="MyGameDevTools.ScriptTemplates.IndentPattern, MyGameDevTools.ScriptTemplates" />
             <ui:SliderInt picking-mode="Ignore" label="Indent Multiplier" high-value="8" low-value="1" name="indent-mult" show-input-field="true" />
         </ui:VisualElement>
