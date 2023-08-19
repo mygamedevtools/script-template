@@ -14,22 +14,18 @@ namespace MyGameDevTools.ScriptTemplates
         public bool Enabled;
         public bool UseAssemblyDefinition;
         public string DefaultNamespace;
-        public IndentPattern IndentPattern;
-        public int IndentMultiplier;
 
         public override bool Equals(object obj)
         {
             return obj is NamespaceSettings settings &&
                    Enabled == settings.Enabled &&
                    UseAssemblyDefinition == settings.UseAssemblyDefinition &&
-                   DefaultNamespace == settings.DefaultNamespace &&
-                   IndentPattern == settings.IndentPattern &&
-                   IndentMultiplier == settings.IndentMultiplier;
+                   DefaultNamespace == settings.DefaultNamespace;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Enabled, UseAssemblyDefinition, DefaultNamespace, IndentPattern, IndentMultiplier);
+            return HashCode.Combine(Enabled, UseAssemblyDefinition, DefaultNamespace);
         }
 
         public bool IsValid() => !Enabled || !string.IsNullOrWhiteSpace(DefaultNamespace);

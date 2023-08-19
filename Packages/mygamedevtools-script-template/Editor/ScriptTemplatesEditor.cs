@@ -31,9 +31,10 @@ namespace MyGameDevTools.ScriptTemplates
             "\n" +
             "#NAMESPACE#<color=#569cd6>public class</color> <color=#4ec9b0>#SCRIPTNAME#</color> : <color=#4ec9b0>MonoBehaviour</color>\n" +
             "{\n" +
-            "    <color=#569cd6>public void</color> <color=#dcdcaa>Start</color>()\n" +
-            "    {\n" +
-            "    }\n" +
+            "# #<color=#569cd6>public void</color> <color=#dcdcaa>Start</color>()\n" +
+            "# #{\n" +
+            "# ## #\n" +
+            "# #}\n" +
             "}";
 
         ScriptTemplateSettings _cachedTemplateSettings;
@@ -52,7 +53,8 @@ namespace MyGameDevTools.ScriptTemplates
             _previewTemplateSettings = new ScriptTemplateSettings()
             {
                 Signature = _cachedTemplateSettings.Signature,
-                Namespace = _cachedTemplateSettings.Namespace
+                Namespace = _cachedTemplateSettings.Namespace,
+                Indentation = _cachedTemplateSettings.Indentation
             };
             _keywordReplacer = new ScriptKeywordReplacer(_previewTemplateSettings);
 
@@ -87,11 +89,13 @@ namespace MyGameDevTools.ScriptTemplates
             var defaultNamespace = namespaceModule.Q<TextField>("default");
             defaultNamespace.SetValueWithoutNotify(_previewTemplateSettings.Namespace.DefaultNamespace);
 
-            var indentType = namespaceModule.Q<EnumField>("indent-type");
-            indentType.SetValueWithoutNotify(_previewTemplateSettings.Namespace.IndentPattern);
+            var indentationModule = rootVisualElement.Q<Module>("indentation-module");
 
-            var indentMult = namespaceModule.Q<SliderInt>("indent-mult");
-            indentMult.SetValueWithoutNotify(_previewTemplateSettings.Namespace.IndentMultiplier);
+            var indentType = indentationModule.Q<EnumField>("indent-type");
+            indentType.SetValueWithoutNotify(_previewTemplateSettings.Indentation.IndentPattern);
+
+            var indentMult = indentationModule.Q<SliderInt>("indent-mult");
+            indentMult.SetValueWithoutNotify(_previewTemplateSettings.Indentation.IndentMultiplier);
 
             clearButton.SetEnabled(!_cachedTemplateSettings.IsEmpty());
             clearButton.clicked += () =>
@@ -138,11 +142,14 @@ namespace MyGameDevTools.ScriptTemplates
                 {
                     Enabled = namespaceModule.value,
                     UseAssemblyDefinition = assembly.value,
-                    DefaultNamespace = defaultNamespace.value,
+                    DefaultNamespace = defaultNamespace.value
+                };
+                _previewTemplateSettings.Indentation = new IndentationSettings
+                {
                     IndentPattern = (IndentPattern)indentType.value,
                     IndentMultiplier = indentMult.value
                 };
-                previewLabel.text = _keywordReplacer.ProcessScriptTemplate(_previewTemplate, "Assets/Scripts/ExampleScript.cs").Replace("namespace", "<color=#569cd6>namespace</color>").Replace(" ", "<color=#144852>·</color>").Replace("\t", "<color=#144852>→   </color>");
+                previewLabel.text = _keywordReplacer.ProcessScriptTemplate(_previewTemplate, "Assets/Scripts/MyScript.cs").Replace("namespace", "<color=#569cd6>namespace</color>").Replace(" ", "<color=#144852>·</color>").Replace("\t", "<color=#144852>→   </color>");
                 saveButton.SetEnabled(_cachedTemplateSettings != _previewTemplateSettings && _previewTemplateSettings.IsValid());
             }
         }

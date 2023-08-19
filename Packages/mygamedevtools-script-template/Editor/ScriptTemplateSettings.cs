@@ -16,6 +16,7 @@ namespace MyGameDevTools.ScriptTemplates
     {
         const string _editorPrefsKey = "com.myunitytools.script-template:settings";
 
+        public IndentationSettings Indentation;
         public SignatureSettings Signature;
         public NamespaceSettings Namespace;
 
@@ -29,12 +30,13 @@ namespace MyGameDevTools.ScriptTemplates
         {
             return obj is ScriptTemplateSettings settings &&
                    EqualityComparer<SignatureSettings>.Default.Equals(Signature, settings.Signature) &&
-                   EqualityComparer<NamespaceSettings>.Default.Equals(Namespace, settings.Namespace);
+                   EqualityComparer<NamespaceSettings>.Default.Equals(Namespace, settings.Namespace) &&
+                   EqualityComparer<IndentationSettings>.Default.Equals(Indentation, settings.Indentation);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Signature, Namespace);
+            return HashCode.Combine(Signature, Namespace, Indentation);
         }
 
         public bool IsEmpty() => Signature.IsEmpty() && Namespace.IsEmpty();
