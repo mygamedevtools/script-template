@@ -1,0 +1,18 @@
+#SIGNATURE#using UnityEditor;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+#NAMESPACE#public class #SCRIPTNAME# : EditorWindow
+{
+# #[MenuItem("Window/#SCRIPTNAME#")]
+# #public static void ShowEditor()
+# #{
+# ## #var window = GetWindow<#SCRIPTNAME#>();
+# ## #window.titleContent = new GUIContent(nameof(#SCRIPTNAME#));
+# #}
+
+# #public void CreateGUI()
+# #{
+# ## #var root = rootVisualElement;
+# #}
+}
