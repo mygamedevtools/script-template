@@ -1,0 +1,13 @@
+#SIGNATURE#using UnityEditor;
+using UnityEditor.UIElements;
+using UnityEngine.UIElements;
+
+#NAMESPACE#[CustomPropertyDrawer(typeof(#SCRIPTNAME#/*Replace with target class name*/))]
+public class #SCRIPTNAME# : PropertyDrawer
+{
+# #public override VisualElement CreatePropertyGUI(SerializedProperty property)
+# #{
+# ## #var root = new VisualElement();
+# ## #return root;
+# #}
+}
