@@ -1,0 +1,9 @@
+#SIGNATURE#using UnityEngine;
+
+#NAMESPACE#public class #SCRIPTNAME# : PropertyAttribute
+{
+# #public #SCRIPTNAME#()
+# #{
+# ## #
+# #}
+}

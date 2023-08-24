@@ -1,0 +1,24 @@
+#SIGNATURE#using UnityEngine;
+using UnityEngine.UIElements;
+using System.Collections.Generic;
+
+#NAMESPACE#public class #SCRIPTNAME# : VisualElement
+{
+# #public new class UxmlFactory : UxmlFactory<#SCRIPTNAME#, UxmlTraits> {}
+
+# #public new class UxmlTraits : VisualElement.UxmlTraits
+# #{
+# ## #public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
+# ## #{
+# ## ## #get
+# ## ## #{
+# ## ## ## #yield return new UxmlChildElementDescription(typeof(VisualElement));
+# ## ## #}
+# ## #}
+
+# ## #public override void Init(VisualElement element, IUxmlAttributes bag, CreationContext context)
+# ## #{
+# ## ## #base.Init(element, bag, context);
+# ## #}
+# #}
+}

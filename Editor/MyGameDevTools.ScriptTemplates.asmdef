@@ -1,0 +1,18 @@
+{
+    "name": "MyGameDevTools.ScriptTemplates",
+    "rootNamespace": "",
+    "references": [
+        "GUID:2fa312fb52fb6b547b332c9fb4cb6d79"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
