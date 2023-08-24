@@ -1,3 +1,10 @@
+# [3.5.0](https://github.com/mygamedevtools/script-template/compare/3.4.1...3.5.0) (2023-08-24)
+
+
+### Features
+
+* add more script templates ([#13](https://github.com/mygamedevtools/script-template/issues/13)) ([fb16353](https://github.com/mygamedevtools/script-template/commit/fb16353643b2f0c4f9c56300f4ff719ce222df17))
+
 ## [3.4.1](https://github.com/mygamedevtools/script-template/compare/3.4.0...3.4.1) (2023-08-19)
 
 
