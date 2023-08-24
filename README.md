@@ -148,6 +148,31 @@ However if you don't have this package in a project, it will not replace the cus
 Also, if you update the Unity Editor version, you will lose the script templates and require to copy them again. This is not necessary if you copy them to your project.
 Both actions of copying to project and to editor will require an editor restart to take effect.
 
+#### Included Templates:
+
+* Game Objects
+  * [Mono Behaviour](https://docs.unity3d.com/ScriptReference/MonoBehaviour.html)
+  * [Scriptable Object](https://docs.unity3d.com/ScriptReference/ScriptableObject.html)
+  * [State Machine Behaviour](https://docs.unity3d.com/ScriptReference/StateMachineBehaviour.html)
+  * [Property Attribute](https://docs.unity3d.com/ScriptReference/PropertyAttribute.html)
+* Editor
+  * [Editor Window](https://docs.unity3d.com/ScriptReference/EditorWindow.html)
+  * [Custom Editor Inspector](https://docs.unity3d.com/ScriptReference/Editor.html)
+  * [Property Drawer](https://docs.unity3d.com/ScriptReference/PropertyDrawer.html)
+* UI Toolkit
+  * [Custom Element](https://docs.unity3d.com/Manual/UIE-expose-custom-control-to-uxml.html)
+* Entities
+  * [System](https://docs.unity3d.com/Packages/com.unity.entities@1.0/manual/systems-isystem.html)
+  * [Component](https://docs.unity3d.com/Packages/com.unity.entities@1.0/manual/components-unmanaged.html)
+  * [Authoring](https://docs.unity3d.com/Packages/com.unity.entities@1.0/manual/baking-baker-overview.html) (Baker Workflow)
+  * [Managed Component](https://docs.unity3d.com/Packages/com.unity.entities@1.0/manual/components-managed.html)
+  * [Managed System](https://docs.unity3d.com/Packages/com.unity.entities@1.0/manual/systems-systembase.html)
+* Plain C#
+  * Class
+  * Struct
+  * Enum
+  * Interface
+
 How it works
 ---
 
